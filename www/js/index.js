@@ -20,7 +20,7 @@ rc2016_conexion es la variable localstorage para ver si hay conexion
 rc2016_notfirstime es la variable localstorage para ver si es el primer ingreso
  */
  //variables globales de DDBB
-var db;
+ var db;
 var shortName = 'rc2016';
 var version = '1.0';
 var displayName = 'rc2016';
@@ -30,13 +30,25 @@ var app = {
     initialize: function() {
         this.bindEvents();
     },
-
+    // Bind Event Listeners
+    //
+    // Bind any events that are required on startup. Common events are:
+    // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+        app.receivedEvent('deviceready');
         chequearconexion();
         generar_contenido();
+    },
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        console.log('Received Event: ' + id);
     }
 };
 function chequearconexion(){
@@ -60,69 +72,54 @@ function chequearconexion(){
         console.log("hay conexion de algun tipo");
     }
 }
-
 function generar_contenido() {
-    if (localStorage.getItem("rc2016_firstime") === null || localStorage.getItem("rc2016_notfirstime") <> "1") {
+    if (localStorage.getItem("rc2016_firstime") === null) {
+        console.log("creando tablasparapato");
         crear_tablas();
     } else {
-        obtener_contenido();
+        //obtener_contenido();
+        console.log("obtener_contenido");
     }
 }
-
 function crear_tablas(){
-    console.log("creando tablas");
-    var db = window.openDatabase(shortName, version, displayName, maxSize);
-    db.transaction(creacionDB, nullHandler, errorHandler);
-}
-function creacionDB(tx) {
-    var sql3 = "CREATE TABLE IF NOT EXISTS carreras (id_carrera INTEGER PRIMARY KEY,carrera,nro_carrera,carreras_totales,fecha,categoria,id_categoria,categoria_short, destacado,latitud,longitud,id_circuito,circuito,extension,imagen)";
-    tx.executeSql(sql3);
-}
-function nullHandler(testo){
-  console.log("null handler");
-}
-function successHandler(){
-  console.log("tabla creada con exito");
-}
-function errorHandler(tx,error) {
-   console.log('Mensaje: ' + error.message + ' code: ' + error.code);
+    console.log("creando tablas 2");
+    console.log("open database: " + shortName + " version: " + version + "dis name: " + displayName + "size: " + maxSize);
+    db = openDatabase(shortName, version, displayName, maxSize);
+    db.transaction(function(tx){
+        console.log("creacionDB");
+        var sql3 = "CREATE TABLE IF NOT EXISTS carreras (id_carrera INTEGER PRIMARY KEY,carrera TEXT,nro_carrera INTEGER,carreras_totales INTEGER,fecha TEXT,categoria TEXT,id_categoria INTEGER,categoria_short TEXT,destacado INTEGER,latitud TEXT,longitud TEXT,id_circuito INTEGER,circuito TEXT,extension DECIMAL,imagen TEXT)";
+        tx.executeSql(sql3);
+    },funcionvacia,traer_contenido,transaction_error);
+
 }
 
-function obtener_contenido(){
-    db = window.openDatabase(shortName, version, displayName, maxSize);
-    console.log("database opened");
-    db.transaction(getCarreras, transaction_error);
-}
-
-function getCarreras(){
-    var sql = "SELECT id_serie,max(modificado) FROM series_se GROUP BY id_serie ORDER BY max(modificado) DESC";
-    tx.executeSql(sql, [], getSerieExito);
+function funcionvacia(){
+    console.log("nada");
 }
 
 function transaction_error(tx, error) {
-    console.log(tx);
-}
-function getSerieExito(tx, result) {
-    if (result.rows.length > 0) {
-        for (var i = 0; i < result.rows.length; i++) {
-            var row = result.rows.item(i);
-            console.log(row);
-            var howmany = true;
-            pegar_capitulo_vista(row,howmany);
-        }
-    } else {
-        var howmany = false;
-        var row = ["No hay carreras este fin de semana."]
-        pegar_capitulo_vista(row,howmany);
-    }
+    console.log('OKA: ' + error.message + ' code: ' + error.code);
 }
 
-function pegar_capitulo_vista(res,howmany) {
-   /* //header rango fecha
-    $("#rango_fechas").append('<a href="#" class="brand-logo"><i class="mdi-hardware-keyboard-arrow-left left anterior_se"></i><span class="ultra-bold">' + monthNames[cortar_fecha(data[0].desde.substr(4, 2))] + '</span><span>' + cortar_fecha(data[0].desde.substr(6, 2)) + ' / <span class="ultra-bold">' + monthNames[cortar_fecha(data[0].hasta.substr(4, 2))] + '</span><span>' + cortar_fecha(data[0].hasta.substr(6, 2))  + '<i class="mdi-hardware-keyboard-arrow-right right siguiente_se"></i></a>' );    */
-    if (howmany == true) {
-        console.log("generamos contenido para mostrar mostrar");
-    } else {
-        console.log("no resultados en db para mostrar");
-    }
+function traer_contenido(){
+    console.log("traemos el json");
+    $.post("http://autowikipedia.es/phonegap/racing_calendar_eventos_anual.php", function(data) {
+        $.each(data, function(i, item) {
+            insertar_contenido(item);
+        });
+    },"json")
+}
+numero_insert = 1;
+function insertar_contenido(item) {
+    db.transaction(function(tx) {
+    tx.executeSql('INSERT INTO carreras (id_carrera,carrera,nro_carrera,carreras_totales,fecha,categoria,id_categoria,categoria_short,destacado,latitud,longitud,id_circuito,circuito,extension,imagen) Values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [item.id_carrera,item.carrera,item.nro_fecha,item.nro_fecha,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen], function(tx, results){ //funcion para mensaje
+            console.log("insert nro: " + numero_insert);
+            console.log(item.id_carrera+ " " +item.carrera+ " " +item.nro_fecha+ " " +item.nro_fecha+ " " +item.fecha+ " " +item.categoria+ " " +item.categoria_id+ " " +item.categoria_short+ " " +item.destacado+ " " +item.latitud+ " " +item.longitud+ " " +item.circuito_id+ " " +item.circuito+ " " +item.extension+ " " +item.imagen);
+            ++numero_insert;
+            },transaction_error);
+    });
+}
+
+function mostrar_contenido(){
+    console.log("aca generamos el html");
 }
