@@ -104,19 +104,24 @@ function transaction_error(tx, error) {
 function traer_contenido(){
     console.log("traemos el json");
     $.post("http://autowikipedia.es/phonegap/racing_calendar_eventos_anual.php", function(data) {
+        console.log("cantidad resultados: " + data.length);
         $.each(data, function(i, item) {
-            insertar_contenido(item);
+            insertar_contenido(item, data.length);
         });
     },"json");
 }
 numero_insert = 1;
-function insertar_contenido(item) {
+function insertar_contenido(item,total) {
     db.transaction(function(tx) {
     tx.executeSql('INSERT INTO carreras (id_carrera,carrera,nro_carrera,carreras_totales,fecha,categoria,id_categoria,categoria_short,destacado,latitud,longitud,id_circuito,circuito,extension,imagen) Values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [item.id_carrera,item.carrera,item.nro_fecha,item.nro_fecha,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen], function(tx, results){ //funcion para mensaje
             console.log("insert nro: " + numero_insert);
             console.log(item.id_carrera+ " " +item.carrera+ " " +item.nro_fecha+ " " +item.nro_fecha+ " " +item.fecha+ " " +item.categoria+ " " +item.categoria_id+ " " +item.categoria_short+ " " +item.destacado+ " " +item.latitud+ " " +item.longitud+ " " +item.circuito_id+ " " +item.circuito+ " " +item.extension+ " " +item.imagen);
+            //muestro el html cuando se insertar el ultimo 
+            if (total == numero_insert) {
+                mostrar_contenido();
+            }
             ++numero_insert;
-            },transaction_error);
+        },transaction_error);
     });
 }
 
