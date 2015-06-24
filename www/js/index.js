@@ -107,7 +107,7 @@ function traer_contenido(){
         $.each(data, function(i, item) {
             insertar_contenido(item);
         });
-    },"json")
+    },"json");
 }
 numero_insert = 1;
 function insertar_contenido(item) {
