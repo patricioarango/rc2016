@@ -28,10 +28,9 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/materialize.min.css" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <title>Racing Calendar</title>
     </head>
     <body>
-     <button id="borrar">borrar db</button>
         <div class="app">
             <h1>PhoneGap</h1>
             <div id="deviceready" class="blink">
@@ -39,17 +38,36 @@
                 <p class="event received">Device is Ready25</p>
             </div>
         </div>
+        
+        <div id="eventos"></div>
+
+        <button id="borrar">borrar db</button>
+      <footer id="pie">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Racing Calendar</h5>
+                <p class="grey-text text-lighten-4">Para saber qu&eacute; carreras hay el fin de semana.</p>
+              </div>
+
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2015 Copyright Patricio Arango
+            <a class="grey-text text-lighten-4 right" href="http://autowikipedia.es" target="_blank">autowikipedia.es</a>
+            </div>
+          </div>
+        </footer>        
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jQuery.js"></script>
-       <!-- <script type="text/javascript" src="js/materialize.min.js"></script> -->
+        <script type="text/javascript" src="js/materialize.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
         </script>
-        
         <script>
-
- var db;
+var db;
 var shortName = 'rc2016';
 var version = '1.0';
 var displayName = 'rc2016';
@@ -79,8 +97,6 @@ var sql = "DROP TABLE carreras";
 $("#borrar").click(function() {
   borrarDB();
 });
-
-
 </script>
     </body>
 </html>
