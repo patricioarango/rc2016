@@ -52,5 +52,21 @@
             $(".button-collapse").sideNav({menuWidth: 240, activationWidth: 70});
         });
         </script>    
+        <script type="text/javascript">
+   function get_dias_periodo(semana) {
+    var now = new Date();
+    var lunes;
+    var domingo;
+    if (semana < 0) {
+      lunes = new Date(now.setDate(now.getDate() - now.getDay() + 1 + (semana * 7)));
+    } else {
+      lunes = new Date(now.setDate(now.getDate() - now.getDay() + (1 + (semana * 7))));
+    }
+    //el domingo siempre son 7 dias a partir del lunes establecido
+    domingo = new Date(now.setDate(now.getDate() - now.getDay() + 7));
+    console.log(lunes + domingo);
+  }
+  get_dias_periodo(-1);
+        </script>    
 </body>
 </html>

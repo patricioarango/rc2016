@@ -82,7 +82,6 @@ function generar_contenido() {
     }
 }
 function crear_tablas(){
-    console.log("creando tablas 2");
     console.log("open database: " + shortName + " version: " + version + "dis name: " + displayName + "size: " + maxSize);
     db = openDatabase(shortName, version, displayName, maxSize);
     db.transaction(function(tx){
@@ -124,7 +123,23 @@ function insertar_contenido(item,total) {
         },transaction_error);
     });
 }
-
+/*
+function traer_capitulo(id_serie) {
+  db.transaction(function(tx) {
+    tx.executeSql('SELECT * FROM series_se WHERE id_serie=? AND visto=1 ORDER BY modificado DESC LIMIT 1', [id_serie],mostrar_capitulos,nullHandler("tx datos capitulo"),transaction_error);
+  });
+}
+*/
 function mostrar_contenido(){
-    console.log("aca generamos el html");
+    console.log("seleccionamos from db");
+    db.transaction(function(tx) {
+    tx.executeSql("SELECT * FROM carreras where fecha > '2015-02-01'", [],get_contenido_db,funcionvacia(),transaction_error);
+  });
+}
+function get_contenido_db(tx, result) {
+  var row = result.rows.item;
+  for (var i = 0; i < result.rows.length; i++) {
+    var row = result.rows.item(i);
+    console.log(row);
+  }
 }
