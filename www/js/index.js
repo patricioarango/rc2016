@@ -44,13 +44,15 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
         chequearconexion();
-        generar_contenido();
+        
+        
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         console.log('Received Event: ' + id);
     }
 };
+
 function chequearconexion(){
     var networkState = navigator.connection.type;
     var conexion;
@@ -71,19 +73,50 @@ function chequearconexion(){
         conexion = window.localStorage.setItem("rc2016_conexion", "1");
         console.log("hay conexion de algun tipo");
     }
+    geolocalizar();
 }
+
+function geolocalizar(){
+    if (localStorage.getItem("rc2016_geolocated") == "0" || localStorage.getItem("rc2016_geolocated") === null) {
+        console.log("geolocalizando...");
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    } else {
+        generar_contenido();
+    }
+}
+    // onSuccess Geolocation
+    function onSuccess(position,generar_contenido) {
+        localStorage.setItem("rc2016_geolocated","1");
+        localStorage.setItem("rc2016_lat", position.coords.latitude);
+        localStorage.setItem("rc2016_lon", position.coords.longitude);
+        console.log("latitude: " + position.coords.latitude);
+        console.log("longitude: " + position.coords.longitude);
+        generar_contenido();        
+    }
+
+    function onError(error,generar_contenido) {
+        //por default location at congreso, kilómetros cero
+        localStorage.setItem("rc2016_geolocated","0");
+        localStorage.setItem("rc2016_lat", "-34.609772");
+        localStorage.setItem("rc2016_lon", "-58.392363");
+        console.log("latitude def: -34.609772");
+        console.log("longitude def: -58.392363");
+        generar_contenido();
+    }
+
 function generar_contenido() {
-    if (localStorage.getItem("rc2016_firstime") === null) {
+    console.log("open database: " + shortName + " version: " + version + "dis name: " + displayName + "size: " + maxSize);
+    db = openDatabase(shortName, version, displayName, maxSize);    
+    if (localStorage.getItem("rc2016_firstime") === null || localStorage.getItem("rc2016_firstime") == 0) {
         console.log("creando tablasparapato");
         crear_tablas();
     } else {
-        //obtener_contenido();
-        console.log("obtener_contenido");
+        console.log("obtener_contenido from db");
+        mostrar_contenido();
     }
 }
+
 function crear_tablas(){
-    console.log("open database: " + shortName + " version: " + version + "dis name: " + displayName + "size: " + maxSize);
-    db = openDatabase(shortName, version, displayName, maxSize);
     db.transaction(function(tx){
         console.log("creacionDB");
         var sql3 = "CREATE TABLE IF NOT EXISTS carreras (id_carrera INTEGER PRIMARY KEY,carrera TEXT,nro_carrera INTEGER,carreras_totales INTEGER,fecha TEXT,categoria TEXT,id_categoria INTEGER,categoria_short TEXT,destacado INTEGER,latitud TEXT,longitud TEXT,id_circuito INTEGER,circuito TEXT,extension DECIMAL,imagen TEXT)";
@@ -118,6 +151,7 @@ function insertar_contenido(item,total) {
             //muestro el html cuando se insertar el ultimo 
             if (total == numero_insert) {
                 mostrar_contenido();
+                localStorage.setItem("rc2016_firstime","1");
             }
             ++numero_insert;
         },transaction_error);
@@ -131,6 +165,7 @@ function traer_capitulo(id_serie) {
 }
 */
 function mostrar_contenido(){
+    //strftime('%m', fecha) as mes 
     console.log("seleccionamos from db");
     db.transaction(function(tx) {
     tx.executeSql("SELECT * FROM carreras where fecha > '2015-02-01'", [],get_contenido_db,funcionvacia(),transaction_error);
