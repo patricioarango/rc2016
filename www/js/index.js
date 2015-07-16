@@ -77,16 +77,10 @@ function chequearconexion(){
 }
 
 function geolocalizar(){
-    if (localStorage.getItem("rc2016_geolocated") == "0" || localStorage.getItem("rc2016_geolocated") === null) {
-        console.log("geolocalizando...");
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    } else {
-        generar_contenido();
-    }
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
 }
     // onSuccess Geolocation
     function onSuccess(position,generar_contenido) {
-        localStorage.setItem("rc2016_geolocated","1");
         localStorage.setItem("rc2016_lat", position.coords.latitude);
         localStorage.setItem("rc2016_lon", position.coords.longitude);
         console.log("latitude: " + position.coords.latitude);
@@ -96,7 +90,6 @@ function geolocalizar(){
 
     function onError(error,generar_contenido) {
         //por default location at congreso, kilómetros cero
-        localStorage.setItem("rc2016_geolocated","0");
         localStorage.setItem("rc2016_lat", "-34.609772");
         localStorage.setItem("rc2016_lon", "-58.392363");
         console.log("latitude def: -34.609772");
