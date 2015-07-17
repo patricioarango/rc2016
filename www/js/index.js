@@ -42,6 +42,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+        $(".button-collapse").sideNav({menuWidth: 240, activationWidth: 70});
         app.receivedEvent('deviceready');
         chequearconexion();
         
@@ -80,15 +81,15 @@ function geolocalizar(){
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
 }
     // onSuccess Geolocation
-    function onSuccess(position,generar_contenido) {
+    function onSuccess(position) {
         localStorage.setItem("rc2016_lat", position.coords.latitude);
         localStorage.setItem("rc2016_lon", position.coords.longitude);
         console.log("latitude: " + position.coords.latitude);
         console.log("longitude: " + position.coords.longitude);
-        generar_contenido();        
+            generar_contenido();    
     }
 
-    function onError(error,generar_contenido) {
+    function onError(error) {
         //por default location at congreso, kilómetros cero
         localStorage.setItem("rc2016_lat", "-34.609772");
         localStorage.setItem("rc2016_lon", "-58.392363");
@@ -165,9 +166,57 @@ function mostrar_contenido(){
   });
 }
 function get_contenido_db(tx, result) {
-  var row = result.rows.item;
-  for (var i = 0; i < result.rows.length; i++) {
-    var row = result.rows.item(i);
-    console.log(row);
-  }
+    var eventos = $('#eventos').empty();
+    //var row = result.rows.item;
+if (result.rows.length == 0) {
+        eventos.append('<div class="row">' +
+                  '<div class="col s12 m12">' +
+                    '<div class="card">' +
+                      '<div class="card-content no_eventos">' +
+                          '<i class="mdi-alert-warning"></i> No events this week.' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>');        
+    } else {
+        for (var i = 0; i < result.rows.length; i++) {
+            var row = result.rows.item(i);
+            console.log(row);
+            //nombre corto para categoria si el nombre es largo
+            if (row.categoria.length > 15) {
+                var categoria = row.categoria_short;
+            }
+            else {
+                var categoria = row.categoria;
+            }
+            //destacados
+            if (row.destacado == "1") {
+                 destacado = '<i class="medium mdi-action-stars right blue-text  text-accent-3"></i>' ;
+            }
+            else {
+                 destacado = "";
+            }                        
+            eventos.append('<div class="row">' +
+                          '<div class="col s12 m12">' +
+                            '<div class="card" data-id_categoria="' + row.id_categoria + '">' +
+                              '<div class="card-image">' +
+                                '<img src="racing_calendar_pics/cat_id_1/f1-9.jpg">' +
+                                '<span class="card-title"><strong>' + categoria + ':</strong> ' + row.carrera + '</span>' +
+                              '</div>' +
+                              '<div class="card-content">' +
+                                '<div class="col s10">' +
+                                  '<p><i class="mdi-action-today"></i><strong> fecha</strong> nro_fecha</p>' +
+                                  '<p>distancia</p>' +
+                                  '<p>' + row.circuito + '</p>' +
+                                '</div>'  +
+                                '<div class="col s2 destacado">' +
+                                    destacado +
+                                '</div>'  +
+                              '</div>' +
+                            '</div>' +
+                          '</div>' +
+                        '</div>');            
+        }    
+    }
 }
+
