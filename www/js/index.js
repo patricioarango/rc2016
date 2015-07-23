@@ -45,8 +45,6 @@ var app = {
         $(".button-collapse").sideNav({menuWidth: 240, activationWidth: 70});
         app.receivedEvent('deviceready');
         chequearconexion();
-        
-        
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -86,7 +84,7 @@ function geolocalizar(){
         localStorage.setItem("rc2016_lon", position.coords.longitude);
         console.log("latitude: " + position.coords.latitude);
         console.log("longitude: " + position.coords.longitude);
-            generar_contenido();    
+        generar_contenido();    
     }
 
     function onError(error) {
@@ -100,10 +98,14 @@ function geolocalizar(){
 
 function generar_contenido() {
     console.log("open database: " + shortName + " version: " + version + "dis name: " + displayName + "size: " + maxSize);
-    db = openDatabase(shortName, version, displayName, maxSize);    
+    db = openDatabase(shortName, version, displayName, maxSize);
     if (localStorage.getItem("rc2016_firstime") === null || localStorage.getItem("rc2016_firstime") == 0) {
-        console.log("creando tablasparapato");
-        crear_tablas();
+        if (window.localStorage.getItem("rc2016_conexion") == "0") {
+            alert("we need conection for the first use");
+        } else {
+            console.log("creando tablasparapato");
+            crear_tablas();
+        }
     } else {
         console.log("obtener_contenido from db");
         mostrar_contenido();
@@ -198,7 +200,7 @@ if (result.rows.length == 0) {
             }                        
             eventos.append('<div class="row">' +
                           '<div class="col s12 m12">' +
-                            '<div class="card" data-id_categoria="' + row.id_categoria + '">' +
+                            '<div class="card flow-text" data-id_categoria="' + row.id_categoria + '">' +
                               '<div class="card-image">' +
                                 '<img src="racing_calendar_pics/cat_id_1/f1-9.jpg">' +
                                 '<span class="card-title"><strong>' + categoria + ':</strong> ' + row.carrera + '</span>' +
@@ -218,5 +220,28 @@ if (result.rows.length == 0) {
                         '</div>');            
         }    
     }
+    sync_process();
 }
+function sync_process(){
+    var con = window.localStorage.getItem("rc2016_conexion");
+    console.log("proceso sync starts");
+        var a = Math.floor(Date.now() / 1000);
+    if (con == 1) {
+        var url = "http://autowikipedia.es/phonegap/racing_calendar_eventos_sync.php?fecha_actualizacion=" + a;
+        $.post(url, function(data) {
+            console.log("results for sync: " + data.length);
+            if (data[0].resultados == 0) {
+                console.log("no new data");
+            } else {
+                $.each(data, function(i, item) {
+                    //insertar_contenido(item, data.length);
+                });
+            }
+        },"json");
+        //ultima actualizacion
+        window.localStorage.setItem("rc2016_last_act", a);
+    } else {
+        console.log("no conection for sync, maybe later");
+    }
 
+}
