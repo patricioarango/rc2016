@@ -25,6 +25,10 @@ var shortName = 'rc2016';
 var version = '1.0';
 var displayName = 'rc2016';
 var maxSize = 65535;
+
+monthNames = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN",
+    "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -162,6 +166,8 @@ function traer_capitulo(id_serie) {
 */
 function mostrar_contenido(){
     //strftime('%m', fecha) as mes 
+    var per = get_dias_periodo();
+    console.log("fechas query" + per.fecha_inicial + per.fecha_final);
     console.log("seleccionamos from db");
     db.transaction(function(tx) {
     tx.executeSql("SELECT * FROM carreras where fecha > '2015-02-01'", [],get_contenido_db,funcionvacia(),transaction_error);
@@ -225,7 +231,6 @@ if (result.rows.length == 0) {
 function sync_process(){
     var con = window.localStorage.getItem("rc2016_conexion");
     console.log("proceso sync starts");
-        var a = Math.floor(Date.now() / 1000);
     if (con == 1) {
         var url = "http://autowikipedia.es/phonegap/racing_calendar_eventos_sync.php?fecha_actualizacion=" + a;
         $.post(url, function(data) {
@@ -234,14 +239,73 @@ function sync_process(){
                 console.log("no new data");
             } else {
                 $.each(data, function(i, item) {
-                    //insertar_contenido(item, data.length);
+                    insertar_contenido_sync(item, data.length);
                 });
             }
         },"json");
-        //ultima actualizacion
-        window.localStorage.setItem("rc2016_last_act", a);
     } else {
         console.log("no conection for sync, maybe later");
     }
 
 }
+numero_insert_sync = 1;
+function insertar_contenido_sync(item,total) {
+    var a = Math.floor(Date.now() / 1000);
+    db.transaction(function(tx) {
+    tx.executeSql(item.sentencia, [item.id_carrera,item.carrera,item.nro_fecha,item.nro_fecha,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen], function(tx, results){ //funcion para mensaje
+            console.log("insert nro: " + numero_insert_sync);
+            console.log("insert data: " + item.id_carrera+ " " +item.carrera+ " " +item.nro_fecha+ " " +item.nro_fecha+ " " +item.fecha+ " " +item.categoria+ " " +item.categoria_id+ " " +item.categoria_short+ " " +item.destacado+ " " +item.latitud+ " " +item.longitud+ " " +item.circuito_id+ " " +item.circuito+ " " +item.extension+ " " +item.imagen);
+            //muestro el html cuando se insertar el ultimo 
+            if (total == numero_insert_sync) {
+                mostrar_contenido();
+                //ultima actualizacion
+                window.localStorage.setItem("rc2016_last_act", a);
+            }
+            ++numero_insert_sync;
+        },transaction_error);
+    });
+}
+$("#rango_fechas").on('click',".anterior_se",function(e) {
+    e.preventDefault();
+    var posicion_inicial = $("#rango_fechas").data("posicion");
+    var posicion_se = posicion_inicial - 1;
+    $("#rango_fechas").data("posicion", posicion_se);
+    mostrar_contenido();
+    
+});
+$("#rango_fechas").on('click',".siguiente_se",function(e) {
+    e.preventDefault();
+    var posicion_inicial = $("#rango_fechas").data("posicion");
+    var posicion_se = posicion_inicial + 1;
+    $("#rango_fechas").data("posicion", posicion_se);
+    mostrar_contenido();   
+});
+
+function get_dias_periodo() {
+    var $rango_fechas = $("#rango_fechas");
+    var semana = $("#rango_fechas").data("posicion");
+    var now = new Date();
+    var lunes; var domingo;
+    if (semana < 0) {
+      lunes = new Date(now.setDate(now.getDate() - now.getDay() + 1 + (semana * 7)));
+    } else {
+      lunes = new Date(now.setDate(now.getDate() - now.getDay() + (1 + (semana * 7))));
+    }
+    //el domingo siempre son 7 dias a partir del lunes establecido
+    domingo = new Date(now.setDate(now.getDate() - now.getDay() + 7));
+
+    $rango_fechas.empty();
+    $rango_fechas.append('<span class="flow-text" style="font-size:1.9em;"><i class="mdi-hardware-keyboard-arrow-left anterior_se"></i><strong>' + monthNames[lunes.getMonth()] + '</strong>' + lunes.getDate() + '<strong>/' + monthNames[domingo.getMonth()] + '</strong>' + domingo.getDate() + ' <i class="mdi-hardware-keyboard-arrow-right siguiente_se"></i></span>');
+
+    return {
+        "fecha_inicial": lunes.yyyymmdd(),
+        "fecha_final": domingo.yyyymmdd()
+    }; 
+}
+
+Date.prototype.yyyymmdd = function() {
+  var yyyy = this.getFullYear().toString();
+  var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+  var dd  = this.getDate().toString();
+  return yyyy + (mm[1]?mm:"0"+mm[0]) + (dd[1]?dd:"0"+dd[0]); // padding
+};
