@@ -142,6 +142,7 @@ function traer_contenido(){
         });
     },"json");
 }
+
 numero_insert = 1;
 function insertar_contenido(item,total) {
     db.transaction(function(tx) {
@@ -170,13 +171,15 @@ function mostrar_contenido(){
     console.log("fechas query" + per.fecha_inicial + per.fecha_final);
     console.log("seleccionamos from db");
     db.transaction(function(tx) {
-    tx.executeSql("SELECT * FROM carreras where fecha > '2015-02-01'", [],get_contenido_db,funcionvacia(),transaction_error);
+    tx.executeSql("SELECT *,strftime('%m', fecha) as mes,strftime('%d', fecha) as dia FROM carreras where fecha > '2015-02-01'", [],get_contenido_db,funcionvacia(),transaction_error);
   });
 }
+
 function get_contenido_db(tx, result) {
+    console.log("get_contenido_db");
     var eventos = $('#eventos').empty();
     //var row = result.rows.item;
-if (result.rows.length == 0) {
+    if (result.rows.length == 0) {
         eventos.append('<div class="row">' +
                   '<div class="col s12 m12">' +
                     '<div class="card">' +
@@ -187,9 +190,11 @@ if (result.rows.length == 0) {
                   '</div>' +
                 '</div>');        
     } else {
+        var row = result.rows.item;
         for (var i = 0; i < result.rows.length; i++) {
             var row = result.rows.item(i);
             console.log(row);
+            var distancia; var circuito; var nro_fecha; var destacado;   
             //nombre corto para categoria si el nombre es largo
             if (row.categoria.length > 15) {
                 var categoria = row.categoria_short;
@@ -203,19 +208,38 @@ if (result.rows.length == 0) {
             }
             else {
                  destacado = "";
-            }                        
+            }
+            //buscamos la distancia siempre que el circuito no sea el "240"
+            if (row.id_circuito != "240") {
+                var lat = localStorage.getItem("rc2016_lat");
+                var lon = localStorage.getItem("rc2016_lon");
+                var p1 = LatLon(Geo.parseDMS(lat), Geo.parseDMS(lon));
+                var p2 = LatLon(Geo.parseDMS(row.latitud), Geo.parseDMS(row.longitud));
+                distancia = '<i class="mdi-maps-place">' + Math.ceil(p1.distanceTo(p2)) + " </i> kms ";
+                circuito = '<i class="mdi-maps-directions-car"></i> ' + row.circuito;
+            }
+            else {
+                distancia = '<i class="mdi-communication-location-off"></i>';
+                circuito = '<i class="mdi-maps-directions-car"></i> - ';
+            }
+            if (row.nro_carrera > 0 ){
+                nro_fecha = " Round" + row.nro_carrera;
+            }
+            else {
+                nro_fecha = "";
+            }
             eventos.append('<div class="row">' +
                           '<div class="col s12 m12">' +
                             '<div class="card flow-text" data-id_categoria="' + row.id_categoria + '">' +
                               '<div class="card-image">' +
                                 '<img src="racing_calendar_pics/cat_id_1/f1-9.jpg">' +
-                                '<span class="card-title"><strong>' + categoria + ':</strong> ' + row.carrera + '</span>' +
+                            '<span class="card-title"><strong>' + categoria + ':</strong> ' + row.carrera + '</span>' +
                               '</div>' +
                               '<div class="card-content">' +
                                 '<div class="col s10">' +
-                                  '<p><i class="mdi-action-today"></i><strong> fecha</strong> nro_fecha</p>' +
-                                  '<p>distancia</p>' +
-                                  '<p>' + row.circuito + '</p>' +
+                                  '<p><i class="mdi-action-today"></i><strong>'+ monthNames[parseInt(row.mes)] + parseInt(row.dia) +' </strong>'+ nro_fecha + '</p>' +
+                                  '<p>' + distancia + '</p>' +
+                                  '<p>' + circuito + '</p>' +
                                 '</div>'  +
                                 '<div class="col s2 destacado">' +
                                     destacado +
@@ -224,14 +248,22 @@ if (result.rows.length == 0) {
                             '</div>' +
                           '</div>' +
                         '</div>');            
-        }    
-    }
+        } // for
+    } //else
     sync_process();
 }
+
+// click de card
+$("#eventos").on('click',".card",function(e) {
+    e.preventDefault();
+   $(this).data("id_categoria");
+});
+
+
 function sync_process(){
-    var con = window.localStorage.getItem("rc2016_conexion");
+    var hay_conexion = window.localStorage.getItem("rc2016_conexion");
     console.log("proceso sync starts");
-    if (con == 1) {
+    /*if (con == 1) {
         var url = "http://autowikipedia.es/phonegap/racing_calendar_eventos_sync.php?fecha_actualizacion=" + a;
         $.post(url, function(data) {
             console.log("results for sync: " + data.length);
@@ -245,9 +277,9 @@ function sync_process(){
         },"json");
     } else {
         console.log("no conection for sync, maybe later");
-    }
-
+    }*/
 }
+
 numero_insert_sync = 1;
 function insertar_contenido_sync(item,total) {
     var a = Math.floor(Date.now() / 1000);
@@ -265,6 +297,7 @@ function insertar_contenido_sync(item,total) {
         },transaction_error);
     });
 }
+
 $("#rango_fechas").on('click',".anterior_se",function(e) {
     e.preventDefault();
     var posicion_inicial = $("#rango_fechas").data("posicion");
@@ -273,6 +306,7 @@ $("#rango_fechas").on('click',".anterior_se",function(e) {
     mostrar_contenido();
     
 });
+
 $("#rango_fechas").on('click',".siguiente_se",function(e) {
     e.preventDefault();
     var posicion_inicial = $("#rango_fechas").data("posicion");

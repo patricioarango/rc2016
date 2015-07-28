@@ -40,7 +40,7 @@
         <li><a href="collapsible.html">Javascript</a></li>
         <li><a href="mobile.html">Mobile</a></li>
       </ul>
-    <div class="center"><span class="flow-text" style="font-size:1.9em;"><i class="mdi-hardware-keyboard-arrow-left"></i><strong>ABR</strong>16/<strong>ABR</strong>18 <i class="mdi-hardware-keyboard-arrow-right"></i></span></div>       
+    <div class="center" id="rango_fechas" data-posicion="0"></div>       
   </nav>
 </header>  
   
@@ -61,7 +61,7 @@
           </div>
           <div class="footer-copyright">
             <div class="container">
-            © 2015 Copyright Patricio Arango
+            © 2015 Copyright Patricio Arango <button id="borrar">borrar db</button>
             <a class="grey-text text-lighten-4 right" href="http://autowikipedia.es" target="_blank">autowikipedia.es</a>
             </div>
           </div>
@@ -69,6 +69,8 @@
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jQuery.js"></script>
         <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script src="js/latlong.js"></script>
+        <script src="js/geo.js"></script>  
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
@@ -92,6 +94,7 @@ function errorHandler(tx,error) {
 }
 
 function borrarDB() { 
+   localStorage.setItem("rc2016_firstime","0");
     var db = openDatabase(shortName, version, displayName, maxSize);
     db.transaction(borracionDB, nullHandler("crear"), errorHandler);
 }
