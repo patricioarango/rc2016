@@ -126,7 +126,7 @@ function crear_tablas(){
 }
 
 function funcionvacia(){
-    console.log("nada");
+    console.log("query exec ok");
 }
 
 function transaction_error(tx, error) {
@@ -135,6 +135,8 @@ function transaction_error(tx, error) {
 
 function traer_contenido(){
     console.log("traemos el json");
+    var a = Math.floor(Date.now() / 1000);
+    window.localStorage.setItem("rc2016_last_act", a);
     $.post("http://autowikipedia.es/phonegap/racing_calendar_eventos_anual.php", function(data) {
         console.log("cantidad resultados a insertar: " + data.length);
         $.each(data, function(i, item) {
@@ -171,7 +173,7 @@ function mostrar_contenido(){
     console.log("fechas query" + per.fecha_inicial + per.fecha_final);
     console.log("seleccionamos from db");
     db.transaction(function(tx) {
-    tx.executeSql("SELECT *,strftime('%m', fecha) as mes,strftime('%d', fecha) as dia FROM carreras where fecha > '2015-02-01'", [],get_contenido_db,funcionvacia(),transaction_error);
+    tx.executeSql("SELECT *,strftime('%m', fecha) as mes,strftime('%d', fecha) as dia FROM carreras where fecha BETWEEN '" + per.fecha_inicial + "' AND '" + per.fecha_final + "' ", [],get_contenido_db,funcionvacia(),transaction_error);
   });
 }
 
@@ -193,7 +195,7 @@ function get_contenido_db(tx, result) {
         var row = result.rows.item;
         for (var i = 0; i < result.rows.length; i++) {
             var row = result.rows.item(i);
-            console.log(row);
+            //console.log(row);
             var distancia; var circuito; var nro_fecha; var destacado;   
             //nombre corto para categoria si el nombre es largo
             if (row.categoria.length > 15) {
@@ -262,31 +264,35 @@ $("#eventos").on('click',".card",function(e) {
 
 function sync_process(){
     var hay_conexion = window.localStorage.getItem("rc2016_conexion");
-    console.log("proceso sync starts");
-    /*if (con == 1) {
+    var a = window.localStorage.getItem("rc2016_last_act");
+    console.log("proceso sync starts" + a);
+    if (hay_conexion == "1") {
         var url = "http://autowikipedia.es/phonegap/racing_calendar_eventos_sync.php?fecha_actualizacion=" + a;
+        console.log(url); 
         $.post(url, function(data) {
-            console.log("results for sync: " + data.length);
             if (data[0].resultados == 0) {
-                console.log("no new data");
+                console.log("no new data to sync");
             } else {
                 $.each(data, function(i, item) {
                     insertar_contenido_sync(item, data.length);
+                    //console.log(item);
+                    //console.log(data.length);
                 });
             }
-        },"json");
+        },"json"); 
     } else {
         console.log("no conection for sync, maybe later");
-    }*/
+    }
 }
 
 numero_insert_sync = 1;
 function insertar_contenido_sync(item,total) {
     var a = Math.floor(Date.now() / 1000);
+    console.log(item.sentencia);
+    console.log(item.carrera+item.nro_carrera+item.carreras_totales+item.fecha+item.categoria+item.categoria_id+item.categoria_short+item.destacado+item.latitud+item.longitud+item.circuito_id+item.circuito+item.extension+item.imagen+item.id_carrera);
     db.transaction(function(tx) {
-    tx.executeSql(item.sentencia, [item.id_carrera,item.carrera,item.nro_fecha,item.nro_fecha,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen], function(tx, results){ //funcion para mensaje
+    tx.executeSql("UPDATE carreras set carrera=?,nro_carrera=?,carreras_totales?=,fecha=?,categoria=?,id_categoria=?,categoria_short=?,destacado=?,latitud=?,longitud=?,id_circuito=?,circuito=?,extension=?,imagen=? WHERE id_carrera=?", [item.carrera,item.nro_carrera,item.carreras_totales,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen,item.id_carrera], function(tx, results){ //funcion para mensaje
             console.log("insert nro: " + numero_insert_sync);
-            console.log("insert data: " + item.id_carrera+ " " +item.carrera+ " " +item.nro_fecha+ " " +item.nro_fecha+ " " +item.fecha+ " " +item.categoria+ " " +item.categoria_id+ " " +item.categoria_short+ " " +item.destacado+ " " +item.latitud+ " " +item.longitud+ " " +item.circuito_id+ " " +item.circuito+ " " +item.extension+ " " +item.imagen);
             //muestro el html cuando se insertar el ultimo 
             if (total == numero_insert_sync) {
                 mostrar_contenido();
@@ -341,5 +347,5 @@ Date.prototype.yyyymmdd = function() {
   var yyyy = this.getFullYear().toString();
   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
   var dd  = this.getDate().toString();
-  return yyyy + (mm[1]?mm:"0"+mm[0]) + (dd[1]?dd:"0"+dd[0]); // padding
+  return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 };

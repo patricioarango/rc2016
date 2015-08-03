@@ -22,7 +22,7 @@
         <li><a href="collapsible.html">Javascript</a></li>
         <li><a href="mobile.html">Mobile</a></li>
       </ul>
-  <div class="center" id="rango_fechas" data-posicion="0"></div>      
+  <div class="center valign" id="rango_fechas" data-posicion="0"></div>      
   </nav>
 </header>  
   
@@ -128,6 +128,8 @@ Date.prototype.yyyymmdd = function() {
   return yyyy + (mm[1]?mm:"0"+mm[0]) + (dd[1]?dd:"0"+dd[0]); // padding
 };
 
+var a = Math.floor(Date.now() / 1000);
+console.log(a);
         </script>    
 </body>
 </html>
