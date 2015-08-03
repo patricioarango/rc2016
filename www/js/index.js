@@ -291,7 +291,7 @@ function insertar_contenido_sync(item,total) {
     console.log(item.sentencia);
     console.log(item.carrera+item.nro_carrera+item.carreras_totales+item.fecha+item.categoria+item.categoria_id+item.categoria_short+item.destacado+item.latitud+item.longitud+item.circuito_id+item.circuito+item.extension+item.imagen+item.id_carrera);
     db.transaction(function(tx) {
-    tx.executeSql("UPDATE carreras set carrera=?,nro_carrera=?,carreras_totales?=,fecha=?,categoria=?,id_categoria=?,categoria_short=?,destacado=?,latitud=?,longitud=?,id_circuito=?,circuito=?,extension=?,imagen=? WHERE id_carrera=?", [item.carrera,item.nro_carrera,item.carreras_totales,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen,item.id_carrera], function(tx, results){ //funcion para mensaje
+    tx.executeSql(item.sentencia, [item.carrera,item.nro_carrera,item.carreras_totales,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen,item.id_carrera], function(tx, results){ //funcion para mensaje
             console.log("insert nro: " + numero_insert_sync);
             //muestro el html cuando se insertar el ultimo 
             if (total == numero_insert_sync) {
