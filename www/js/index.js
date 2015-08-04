@@ -255,13 +255,6 @@ function get_contenido_db(tx, result) {
     sync_process();
 }
 
-// click de card
-$("#eventos").on('click',".card",function(e) {
-    e.preventDefault();
-   $(this).data("id_categoria");
-});
-
-
 function sync_process(){
     var hay_conexion = window.localStorage.getItem("rc2016_conexion");
     var a = window.localStorage.getItem("rc2016_last_act");
@@ -288,16 +281,14 @@ function sync_process(){
 numero_insert_sync = 1;
 function insertar_contenido_sync(item,total) {
     var a = Math.floor(Date.now() / 1000);
-    console.log(item.sentencia);
-    console.log(item.carrera+item.nro_carrera+item.carreras_totales+item.fecha+item.categoria+item.categoria_id+item.categoria_short+item.destacado+item.latitud+item.longitud+item.circuito_id+item.circuito+item.extension+item.imagen+item.id_carrera);
     db.transaction(function(tx) {
     tx.executeSql(item.sentencia, [item.carrera,item.nro_carrera,item.carreras_totales,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen,item.id_carrera], function(tx, results){ //funcion para mensaje
-            console.log("insert nro: " + numero_insert_sync);
             //muestro el html cuando se insertar el ultimo 
             if (total == numero_insert_sync) {
                 mostrar_contenido();
                 //ultima actualizacion
                 window.localStorage.setItem("rc2016_last_act", a);
+                console.log("ultima actualizacion: " + a);
             }
             ++numero_insert_sync;
         },transaction_error);
@@ -345,7 +336,92 @@ function get_dias_periodo() {
 
 Date.prototype.yyyymmdd = function() {
   var yyyy = this.getFullYear().toString();
-  var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+  var mm = (this.getMonth()).toString(); // getMonth() is zero-based
   var dd  = this.getDate().toString();
   return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 };
+
+// click de card
+$("#eventos").on('click',".card",function(e) {
+   e.preventDefault();
+   console.log("listado:" + $(this).data("id_categoria"));
+   mostrar_contenido_listado($(this).data("id_categoria"));
+});
+
+function mostrar_contenido_listado(id_categoria) {
+    db.transaction(function(tx) {
+    tx.executeSql("SELECT *,strftime('%m', fecha) as mes,strftime('%d', fecha) as dia FROM carreras where id_categoria=?", [id_categoria],get_listado_db,funcionvacia(),transaction_error);
+  });
+}
+
+var hoy = new Date();
+var siguiente_carrera = 0;
+function get_listado_db(tx, result){
+    var eventos = $('#eventos').empty();
+    if (result.rows.length == 0) {
+        eventos.append('<div class="row">' +
+                  '<div class="col s12 m12">' +
+                    '<div class="card">' +
+                      '<div class="card-content no_eventos">' +
+                          '<i class="mdi-alert-warning"></i> No events this week.' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>');        
+    } else {
+        var row = result.rows.item;
+        for (var i = 0; i < result.rows.length; i++) {
+            var distancia; var circuito; var nro_fecha; var destacado; 
+            var row = result.rows.item(i);
+            //buscamos la distancia siempre que el circuito no sea el "240"
+                if (row.id_circuito != "240") {
+                    var lat = localStorage.getItem("rc2016_lat");
+                    var lon = localStorage.getItem("rc2016_lon");
+                    var p1 = LatLon(Geo.parseDMS(lat), Geo.parseDMS(lon));
+                    var p2 = LatLon(Geo.parseDMS(row.latitud), Geo.parseDMS(row.longitud));
+                    distancia = Math.ceil(p1.distanceTo(p2));
+                    circuito = row.circuito + ". ";
+                }
+                else {
+                    distancia = "";
+                    circuito = "-";
+                }
+                //destacados
+                if (row.destacado == "1") {
+                    destacado = '<i class="small mdi-action-stars right"></i>';
+                }
+                else {
+                     destacado = '';
+                }
+                //comparamos las fechas
+                var fecha_carrera = new Date(row.fecha);
+                
+                if (hoy.getTime() > fecha_carrera.getTime()) {
+                   tipo_icono = '<i class="material-icons">check_circle</i>';
+                    ++siguiente_carrera;
+
+                } else if (siguiente_carrera == 1){ 
+                    tipo_icono = '<i class="material-icons">radio_button_checked</i>';
+                    --siguiente_carrera;
+
+                } else {
+                    tipo_icono = '<i class="material-icons">radio_button_unchecked</i>';
+                    --siguiente_carrera;
+                }
+                //contenido body
+                eventos.append('<div class="row valign-wrapper borde">'+
+                        '<div class="col s2 icono">' +
+                            tipo_icono +
+                        '</div>' +
+                        '<div class="col s9">' +
+                            '<div class="lista_heading">'+row.carrera+'</div>' +
+                            '<div class="lista_secundario">'+monthNames[parseInt(row.mes)] +', '+ row.dia +'. Round '+ row.nro_carrera +'.</div>' +
+                            '<div class="lista_secundario">'+circuito+' '+distancia+' kms.</div>' +
+                        '</div>' +
+                        '<div class="col s1">' +
+                            destacado +
+                        '</div>' +
+                    '</div>');
+        } //for
+    }//else        
+}
