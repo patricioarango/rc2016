@@ -192,11 +192,12 @@ function get_contenido_db(tx, result) {
                   '</div>' +
                 '</div>');        
     } else {
+        var hay_conexion = window.localStorage.getItem("rc2016_conexion");
         var row = result.rows.item;
         for (var i = 0; i < result.rows.length; i++) {
             var row = result.rows.item(i);
             //console.log(row);
-            var distancia; var circuito; var nro_fecha; var destacado;   
+            var distancia; var circuito; var nro_fecha; var destacado; var foto;   
             //nombre corto para categoria si el nombre es largo
             if (row.categoria.length > 15) {
                 var categoria = row.categoria_short;
@@ -230,11 +231,16 @@ function get_contenido_db(tx, result) {
             else {
                 nro_fecha = "";
             }
+            if (hay_conexion == 1) {
+                foto = row.imagen;
+            } else {
+                foto = 'racing_calendar_pics/cat_id_' + row.id_categoria + '/foto-1.jpg';
+            }
             eventos.append('<div class="row">' +
                           '<div class="col s12 m12">' +
                             '<div class="card flow-text" data-id_categoria="' + row.id_categoria + '">' +
                               '<div class="card-image">' +
-                                '<img src="racing_calendar_pics/cat_id_1/f1-9.jpg">' +
+                                '<img src="' + foto + '">' +
                             '<span class="card-title"><strong>' + categoria + ':</strong> ' + row.carrera + '</span>' +
                               '</div>' +
                               '<div class="card-content">' +
