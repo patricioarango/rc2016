@@ -16,6 +16,8 @@
   <header>
   <nav class="blue lighten-1">
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <i class="material-icons" id="arrow" style="display:none;">arrow_back</i>
+      <span id="cate_cont"></span>
       <ul class="side-nav" id="mobile-demo">
         <li><a href="sass.html">Sass</a></li>
         <li><a href="badges.html">Components</a></li>
@@ -25,16 +27,30 @@
   <div class="center valign" id="rango_fechas" data-posicion="0"></div>      
   </nav>
 </header>  
-  
+  <!-- 
 <div class="progress">
       <div class="indeterminate"></div>
-  </div>   
+  </div>   -->
+<div class="row center loading">
+   <div class="preloader-wrapper active">
+    <div class="spinner-layer spinner-red-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
   <section>
     <div class="row">
       <div class="col s12 m12">
         <div class="card flow-text" data-id_categoria="1">
           <div class="card-image">
-            <img src="racing_calendar_pics/cat_id_1/f1-9.jpg">
+            <img src="racing_calendar_pics/cat_id_1/foto-1.jpg">
             <span class="card-title"><strong> FORMULA 1: </strong>  Zandvoort </span>
           </div>
           <div class="card-content">
@@ -72,7 +88,8 @@
         <script type="text/javascript">
         $(document).ready(function($) {
             $(".button-collapse").sideNav({menuWidth: 240, activationWidth: 70});
-              get_dias_periodo();
+              //get_dias_periodo();
+             get_category_nav();
         });
         </script>    
         <script type="text/javascript">
@@ -130,6 +147,9 @@ Date.prototype.yyyymmdd = function() {
 
 var a = Math.floor(Date.now() / 1000);
 console.log(a);
+
+
+
         </script>    
 </body>
 </html>

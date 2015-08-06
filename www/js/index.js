@@ -192,6 +192,7 @@ function get_contenido_db(tx, result) {
                   '</div>' +
                 '</div>');        
     } else {
+        $(".loading").toggle();
         var hay_conexion = window.localStorage.getItem("rc2016_conexion");
         var row = result.rows.item;
         for (var i = 0; i < result.rows.length; i++) {
@@ -286,6 +287,7 @@ function sync_process(){
 
 numero_insert_sync = 1;
 function insertar_contenido_sync(item,total) {
+    $(".loading").toggle();
     var a = Math.floor(Date.now() / 1000);
     db.transaction(function(tx) {
     tx.executeSql(item.sentencia, [item.carrera,item.nro_carrera,item.carreras_totales,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen,item.id_carrera], function(tx, results){ //funcion para mensaje
@@ -295,6 +297,7 @@ function insertar_contenido_sync(item,total) {
                 //ultima actualizacion
                 window.localStorage.setItem("rc2016_last_act", a);
                 console.log("ultima actualizacion: " + a);
+                $(".loading").toggle();
             }
             ++numero_insert_sync;
         },transaction_error);
@@ -364,6 +367,7 @@ var hoy = new Date();
 var siguiente_carrera = 0;
 function get_listado_db(tx, result){
     var eventos = $('#eventos').empty();
+    var categoria;
     if (result.rows.length == 0) {
         eventos.append('<div class="row">' +
                   '<div class="col s12 m12">' +
@@ -375,6 +379,14 @@ function get_listado_db(tx, result){
                   '</div>' +
                 '</div>');        
     } else {
+        //categoria naveador
+        if (result.rows[0].categoria.length > 19) {
+            var categoria = result.rows[0].categoria_short;
+        }
+        else {
+            var categoria = result.rows[0].categoria;
+        }
+        get_category_nav(categoria);
         var row = result.rows.item;
         for (var i = 0; i < result.rows.length; i++) {
             var distancia; var circuito; var nro_fecha; var destacado; 
@@ -403,15 +415,19 @@ function get_listado_db(tx, result){
                 var fecha_carrera = new Date(row.fecha);
                 
                 if (hoy.getTime() > fecha_carrera.getTime()) {
-                   tipo_icono = '<i class="material-icons">check_circle</i>';
+                   tipo_icono = '<i class="fa fa-check-circle tipo_icono"></i>';
                     ++siguiente_carrera;
 
                 } else if (siguiente_carrera == 1){ 
-                    tipo_icono = '<i class="material-icons">radio_button_checked</i>';
+                    tipo_icono = '<i class="fa fa-dot-circle-o tipo_icono"></i>';
                     --siguiente_carrera;
 
                 } else {
-                    tipo_icono = '<i class="material-icons">radio_button_unchecked</i>';
+                    if (i == 0) { //si empieza el torneo marcamos la 1era carrera
+                        tipo_icono = '<i class="fa fa-dot-circle-o tipo_icono"></i>';
+                    } else {
+                        tipo_icono = '<i class="fa fa-circle-o tipo_icono"></i>';
+                    }
                     --siguiente_carrera;
                 }
                 //contenido body
@@ -431,3 +447,14 @@ function get_listado_db(tx, result){
         } //for
     }//else        
 }
+
+function get_category_nav(categoria){
+    $(".button-collapse").hide();
+    $("#arrow").show();
+    $("#rango_fechas").addClass('brand-logo');
+    $("#rango_fechas").text('category/' + categoria); 
+}
+$(document).on('click', '#arrow', function(event) {
+  event.preventDefault();
+  mostrar_contenido();
+});
