@@ -9,7 +9,7 @@
     </author>
     <icon src="icon.png" />
     <access origin="*" />
-    <preference name='phonegap-version' value='cli-5.1.1' />
+    
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="true" />
     <preference name="orientation" value="portrait" />
