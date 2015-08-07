@@ -14,6 +14,7 @@
 </head>
 <body>
   <header>
+  <div class="navbar-fixed">
   <nav class="blue lighten-1">
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <i class="material-icons" id="arrow" style="display:none;">arrow_back</i>
@@ -26,11 +27,12 @@
       </ul>
   <div class="center valign" id="rango_fechas" data-posicion="0"></div>      
   </nav>
+  </div>
 </header>  
   <!-- 
 <div class="progress">
       <div class="indeterminate"></div>
-  </div>   -->
+  </div>   
 <div class="row center loading">
    <div class="preloader-wrapper active">
     <div class="spinner-layer spinner-red-only">
@@ -43,8 +45,10 @@
       </div>
     </div>
   </div>
+</div>-->
+<div class="row">
+  <div class="center red-text"><i class="material-icons medium">flash_on</i><span style="font-size:5em;font-weight:200;">175 </span><span style="font-size:3em;font-weight:200;">km/h</span></div>
 </div>
-
   <section>
     <div class="row">
       <div class="col s12 m12">
@@ -88,8 +92,8 @@
         <script type="text/javascript">
         $(document).ready(function($) {
             $(".button-collapse").sideNav({menuWidth: 240, activationWidth: 70});
-              //get_dias_periodo();
-             get_category_nav();
+              get_dias_periodo();
+             //get_category_nav();
         });
         </script>    
         <script type="text/javascript">
