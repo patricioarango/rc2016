@@ -361,6 +361,7 @@ function mostrar_contenido_listado(id_categoria) {
     db.transaction(function(tx) {
     tx.executeSql("SELECT *,strftime('%m', fecha) as mes,strftime('%d', fecha) as dia FROM carreras where id_categoria=?", [id_categoria],get_listado_db,funcionvacia(),transaction_error);
   });
+    get_category_nav(id_categoria); 
 }
 
 var hoy = new Date();
@@ -368,6 +369,7 @@ var siguiente_carrera = 0;
 function get_listado_db(tx, result){
     var eventos = $('#eventos').empty();
     var categoria;
+    console.log(result.rows.length);
     if (result.rows.length == 0) {
         eventos.append('<div class="row">' +
                   '<div class="col s12 m12">' +
@@ -379,17 +381,10 @@ function get_listado_db(tx, result){
                   '</div>' +
                 '</div>');        
     } else {
-        //categoria naveador
-        if (result.rows[0].categoria.length > 19) {
-            var categoria = result.rows[0].categoria_short;
-        }
-        else {
-            var categoria = result.rows[0].categoria;
-        }
-        get_category_nav(categoria);
+
         var row = result.rows.item;
         for (var i = 0; i < result.rows.length; i++) {
-            var distancia; var circuito; var nro_fecha; var destacado; 
+            var distancia; var circuito; var nro_fecha; var destacado; var tipo_icono;
             var row = result.rows.item(i);
             //buscamos la distancia siempre que el circuito no sea el "240"
                 if (row.id_circuito != "240") {
