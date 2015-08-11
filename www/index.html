@@ -109,7 +109,7 @@ function errorHandler(tx,error) {
 }
 
 function borrarDB() { 
-   localStorage.setItem("rc2016_firstime","0");
+   localStorage.setItem("rc2016_firstime","1");
     var db = openDatabase(shortName, version, displayName, maxSize);
     db.transaction(borracionDB, nullHandler("crear"), errorHandler);
 }
