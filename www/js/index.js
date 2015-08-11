@@ -259,9 +259,9 @@ function get_contenido_db(tx, result) {
                         '</div>');            
         } // for
     } //else
-    sync_process();
+    //sync_process();
 }
-
+/*
 function sync_process(){
     var hay_conexion = window.localStorage.getItem("rc2016_conexion");
     var a = window.localStorage.getItem("rc2016_last_act");
@@ -449,7 +449,10 @@ function get_category_nav(categoria){
     $("#rango_fechas").addClass('brand-logo');
     $("#rango_fechas").text('category/' + categoria); 
 }
+
 $(document).on('click', '#arrow', function(event) {
   event.preventDefault();
   mostrar_contenido();
 });
+
+*/
