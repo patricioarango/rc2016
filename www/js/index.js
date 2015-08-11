@@ -69,7 +69,7 @@ function chequearconexion(){
     states[Connection.CELL]     = '7';
     states[Connection.NONE]     = '8';
     console.log('Connection type: ' + states[networkState]);
-    if (states[networkState] == 8) { 
+    if (states[networkState] == "8" || states[networkState] == "1") { 
         conexion = window.localStorage.setItem("rc2016_conexion", "0");
         console.log("no hay conexion");
     } else {
@@ -103,13 +103,9 @@ function geolocalizar(){
 function generar_contenido() {
     console.log("open database: " + shortName + " version: " + version + "dis name: " + displayName + "size: " + maxSize);
     db = openDatabase(shortName, version, displayName, maxSize);
-    if (localStorage.getItem("rc2016_firstime") === null || localStorage.getItem("rc2016_firstime") == 0) {
-        if (window.localStorage.getItem("rc2016_conexion") == "0") {
-            alert("we need conection for the first use");
-        } else {
-            console.log("creando tablasparapato");
-            crear_tablas();
-        }
+    if (window.localStorage.getItem("rc2016_firstime") === null || window.localStorage.getItem("rc2016_firstime") == "0") {
+        console.log("creando tablasparapato");
+        crear_tablas();
     } else {
         console.log("obtener_contenido from db");
         mostrar_contenido();
@@ -134,15 +130,19 @@ function transaction_error(tx, error) {
 }
 
 function traer_contenido(){
-    console.log("traemos el json");
-    var a = Math.floor(Date.now() / 1000);
-    window.localStorage.setItem("rc2016_last_act", a);
-    $.post("http://autowikipedia.es/phonegap/racing_calendar_eventos_anual.php", function(data) {
-        console.log("cantidad resultados a insertar: " + data.length);
-        $.each(data, function(i, item) {
-            insertar_contenido(item, data.length);
-        });
-    },"json");
+    if (window.localStorage.getItem("rc2016_conexion") == "1") {
+        console.log("traemos el json");
+        var a = Math.floor(Date.now() / 1000);
+        window.localStorage.setItem("rc2016_last_act", a);
+        $.post("http://autowikipedia.es/phonegap/racing_calendar_eventos_anual.php", function(data) {
+            console.log("cantidad resultados a insertar: " + data.length);
+            $.each(data, function(i, item) {
+                insertar_contenido(item, data.length);
+            });
+        },"json");
+    } else {
+        navigator.notification.alert("Necesitamos conexion para el primer uso", funcionvacia);
+    }
 }
 
 numero_insert = 1;
