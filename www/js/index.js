@@ -26,7 +26,7 @@ var version = '1.0';
 var displayName = 'rc2016';
 var maxSize = 65535;
 
-monthNames = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN",
+monthNames = ["","ENE", "FEB", "MAR", "ABR", "MAY", "JUN",
     "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
 
 var app = {
@@ -58,7 +58,6 @@ var app = {
 
 function chequearconexion(){
     var networkState = navigator.connection.type;
-    var conexion;
     var states = {};
     states[Connection.UNKNOWN]  = '1';
     states[Connection.ETHERNET] = '2';
@@ -70,31 +69,36 @@ function chequearconexion(){
     states[Connection.NONE]     = '8';
     console.log('Connection type: ' + states[networkState]);
     if (states[networkState] == "8" || states[networkState] == "1") { 
-        conexion = window.localStorage.setItem("rc2016_conexion", "0");
+        window.localStorage.setItem("rc2016_conexion", "0");
         console.log("no hay conexion");
     } else {
-        conexion = window.localStorage.setItem("rc2016_conexion", "1");
+       window.localStorage.setItem("rc2016_conexion", "1");
         console.log("hay conexion de algun tipo");
     }
     geolocalizar();
 }
 
 function geolocalizar(){
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    console.log("geolocalizando...");
+    var geooptions = { enableHighAccuracy: true };
+    navigator.geolocation.getCurrentPosition(GeoonSuccess, GeoonError,geooptions);
+    //GeoonError("error");
 }
     // onSuccess Geolocation
-    function onSuccess(position) {
-        localStorage.setItem("rc2016_lat", position.coords.latitude);
-        localStorage.setItem("rc2016_lon", position.coords.longitude);
+    function GeoonSuccess(position) {
+        console.log("geolocation ok");
+        window.localStorage.setItem("rc2016_lat", position.coords.latitude);
+        window.localStorage.setItem("rc2016_lon", position.coords.longitude);
         console.log("latitude: " + position.coords.latitude);
         console.log("longitude: " + position.coords.longitude);
         generar_contenido();    
     }
 
-    function onError(error) {
+    function GeoonError(error) {
+        console.log(error.code + error.message);
         //por default location at congreso, kilómetros cero
-        localStorage.setItem("rc2016_lat", "-34.609772");
-        localStorage.setItem("rc2016_lon", "-58.392363");
+        window.localStorage.setItem("rc2016_lat", "-34.609772");
+        window.localStorage.setItem("rc2016_lon", "-58.392363");
         console.log("latitude def: -34.609772");
         console.log("longitude def: -58.392363");
         generar_contenido();
@@ -103,6 +107,7 @@ function geolocalizar(){
 function generar_contenido() {
     console.log("open database: " + shortName + " version: " + version + "dis name: " + displayName + "size: " + maxSize);
     db = openDatabase(shortName, version, displayName, maxSize);
+    console.log("primera vez" + window.localStorage.getItem("rc2016_firstime"));
     if (window.localStorage.getItem("rc2016_firstime") === null || window.localStorage.getItem("rc2016_firstime") == "0") {
         console.log("creando tablasparapato");
         crear_tablas();
@@ -141,7 +146,8 @@ function traer_contenido(){
             });
         },"json");
     } else {
-        navigator.notification.alert("Necesitamos conexion para el primer uso", funcionvacia);
+        //navigator.notification.alert("Necesitamos conexion para el primer uso", funcionvacia);
+        console.log("aca");
     }
 }
 
@@ -154,7 +160,7 @@ function insertar_contenido(item,total) {
             //muestro el html cuando se insertar el ultimo 
             if (total == numero_insert) {
                 mostrar_contenido();
-                localStorage.setItem("rc2016_firstime","1");
+                window.localStorage.setItem("rc2016_firstime","1");
             }
             ++numero_insert;
         },transaction_error);
@@ -179,6 +185,7 @@ function mostrar_contenido(){
 
 function get_contenido_db(tx, result) {
     console.log("get_contenido_db");
+    $(".loading").hide();
     var eventos = $('#eventos').empty();
     //var row = result.rows.item;
     if (result.rows.length == 0) {
@@ -192,7 +199,6 @@ function get_contenido_db(tx, result) {
                   '</div>' +
                 '</div>');        
     } else {
-        $(".loading").toggle();
         var hay_conexion = window.localStorage.getItem("rc2016_conexion");
         var row = result.rows.item;
         for (var i = 0; i < result.rows.length; i++) {
@@ -215,8 +221,8 @@ function get_contenido_db(tx, result) {
             }
             //buscamos la distancia siempre que el circuito no sea el "240"
             if (row.id_circuito != "240") {
-                var lat = localStorage.getItem("rc2016_lat");
-                var lon = localStorage.getItem("rc2016_lon");
+                var lat = window.localStorage.getItem("rc2016_lat");
+                var lon = window.localStorage.getItem("rc2016_lon");
                 var p1 = LatLon(Geo.parseDMS(lat), Geo.parseDMS(lon));
                 var p2 = LatLon(Geo.parseDMS(row.latitud), Geo.parseDMS(row.longitud));
                 distancia = '<i class="mdi-maps-place">' + Math.ceil(p1.distanceTo(p2)) + " </i> kms ";
@@ -232,6 +238,7 @@ function get_contenido_db(tx, result) {
             else {
                 nro_fecha = "";
             }
+            //foto = 'racing_calendar_pics/cat_id_1/foto-1.jpg';
             if (hay_conexion == 1) {
                 foto = row.imagen;
             } else {
@@ -261,6 +268,52 @@ function get_contenido_db(tx, result) {
     } //else
     //sync_process();
 }
+
+$("#rango_fechas").on('click',".anterior_se",function(e) {
+    e.preventDefault();
+    var posicion_inicial = $("#rango_fechas").data("posicion");
+    var posicion_se = posicion_inicial - 1;
+    $("#rango_fechas").data("posicion", posicion_se);
+    mostrar_contenido();
+    
+});
+
+$("#rango_fechas").on('click',".siguiente_se",function(e) {
+    e.preventDefault();
+    var posicion_inicial = $("#rango_fechas").data("posicion");
+    var posicion_se = posicion_inicial + 1;
+    $("#rango_fechas").data("posicion", posicion_se);
+    mostrar_contenido();   
+});
+
+function get_dias_periodo() {
+    var $rango_fechas = $("#rango_fechas");
+    var semana = $("#rango_fechas").data("posicion");
+    var now = new Date();
+    var lunes; var domingo;
+    if (semana < 0) {
+      lunes = new Date(now.setDate(now.getDate() - now.getDay() + 1 + (semana * 7)));
+    } else {
+      lunes = new Date(now.setDate(now.getDate() - now.getDay() + (1 + (semana * 7))));
+    }
+    //el domingo siempre son 7 dias a partir del lunes establecido
+    domingo = new Date(now.setDate(now.getDate() - now.getDay() + 7));
+
+    $rango_fechas.empty();
+    $rango_fechas.append('<span class="flow-text" style="font-size:1.9em;"><i class="mdi-hardware-keyboard-arrow-left anterior_se"></i><strong>' + monthNames[(lunes.getMonth()+1)] + '</strong>' + lunes.getDate() + '<strong>/' + monthNames[(domingo.getMonth()+1)] + '</strong>' + domingo.getDate() + ' <i class="mdi-hardware-keyboard-arrow-right siguiente_se"></i></span>');
+
+    return {
+        "fecha_inicial": lunes.yyyymmdd(),
+        "fecha_final": domingo.yyyymmdd()
+    }; 
+}
+
+Date.prototype.yyyymmdd = function() {
+  var yyyy = this.getFullYear().toString();
+  var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+  var dd  = this.getDate().toString();
+  return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+};
 /*
 function sync_process(){
     var hay_conexion = window.localStorage.getItem("rc2016_conexion");
@@ -304,51 +357,7 @@ function insertar_contenido_sync(item,total) {
     });
 }
 
-$("#rango_fechas").on('click',".anterior_se",function(e) {
-    e.preventDefault();
-    var posicion_inicial = $("#rango_fechas").data("posicion");
-    var posicion_se = posicion_inicial - 1;
-    $("#rango_fechas").data("posicion", posicion_se);
-    mostrar_contenido();
-    
-});
-
-$("#rango_fechas").on('click',".siguiente_se",function(e) {
-    e.preventDefault();
-    var posicion_inicial = $("#rango_fechas").data("posicion");
-    var posicion_se = posicion_inicial + 1;
-    $("#rango_fechas").data("posicion", posicion_se);
-    mostrar_contenido();   
-});
-
-function get_dias_periodo() {
-    var $rango_fechas = $("#rango_fechas");
-    var semana = $("#rango_fechas").data("posicion");
-    var now = new Date();
-    var lunes; var domingo;
-    if (semana < 0) {
-      lunes = new Date(now.setDate(now.getDate() - now.getDay() + 1 + (semana * 7)));
-    } else {
-      lunes = new Date(now.setDate(now.getDate() - now.getDay() + (1 + (semana * 7))));
-    }
-    //el domingo siempre son 7 dias a partir del lunes establecido
-    domingo = new Date(now.setDate(now.getDate() - now.getDay() + 7));
-
-    $rango_fechas.empty();
-    $rango_fechas.append('<span class="flow-text" style="font-size:1.9em;"><i class="mdi-hardware-keyboard-arrow-left anterior_se"></i><strong>' + monthNames[lunes.getMonth()] + '</strong>' + lunes.getDate() + '<strong>/' + monthNames[domingo.getMonth()] + '</strong>' + domingo.getDate() + ' <i class="mdi-hardware-keyboard-arrow-right siguiente_se"></i></span>');
-
-    return {
-        "fecha_inicial": lunes.yyyymmdd(),
-        "fecha_final": domingo.yyyymmdd()
-    }; 
-}
-
-Date.prototype.yyyymmdd = function() {
-  var yyyy = this.getFullYear().toString();
-  var mm = (this.getMonth()).toString(); // getMonth() is zero-based
-  var dd  = this.getDate().toString();
-  return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
-};
+*/
 
 // click de card
 $("#eventos").on('click',".card",function(e) {
@@ -361,7 +370,6 @@ function mostrar_contenido_listado(id_categoria) {
     db.transaction(function(tx) {
     tx.executeSql("SELECT *,strftime('%m', fecha) as mes,strftime('%d', fecha) as dia FROM carreras where id_categoria=?", [id_categoria],get_listado_db,funcionvacia(),transaction_error);
   });
-    get_category_nav(id_categoria); 
 }
 
 var hoy = new Date();
@@ -388,8 +396,8 @@ function get_listado_db(tx, result){
             var row = result.rows.item(i);
             //buscamos la distancia siempre que el circuito no sea el "240"
                 if (row.id_circuito != "240") {
-                    var lat = localStorage.getItem("rc2016_lat");
-                    var lon = localStorage.getItem("rc2016_lon");
+                    var lat = window.localStorage.getItem("rc2016_lat");
+                    var lon = window.localStorage.getItem("rc2016_lon");
                     var p1 = LatLon(Geo.parseDMS(lat), Geo.parseDMS(lon));
                     var p2 = LatLon(Geo.parseDMS(row.latitud), Geo.parseDMS(row.longitud));
                     distancia = Math.ceil(p1.distanceTo(p2));
@@ -442,7 +450,7 @@ function get_listado_db(tx, result){
         } //for
     }//else        
 }
-
+/*
 function get_category_nav(categoria){
     $(".button-collapse").hide();
     $("#arrow").show();
@@ -454,5 +462,4 @@ $(document).on('click', '#arrow', function(event) {
   event.preventDefault();
   mostrar_contenido();
 });
-
 */
