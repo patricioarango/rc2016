@@ -439,7 +439,7 @@ function get_listado_db(tx, result){
                     if (i == 0 || siguiente_carrera == 1) { //si empieza el torneo marcamos la 1era carrera
                         tipo_icono = '<i class="material-icons">adjust</i>';
                     } else {
-                        tipo_icono = '<i class="material-icons">radio_button_unchecked</i>';
+                        tipo_icono = '<i class="material-icons">&#xE836;</i>';
                     }
                 }
                 //contenido body
