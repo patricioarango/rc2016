@@ -80,9 +80,8 @@ function chequearconexion(){
 
 function geolocalizar(){
     console.log("geolocalizando...");
-    var geooptions = { enableHighAccuracy: true };
+    var geooptions = { maximumAge: 600000, timeout: 10000, enableHighAccuracy: true};
     navigator.geolocation.getCurrentPosition(GeoonSuccess, GeoonError,geooptions);
-    //GeoonError("error");
 }
     // onSuccess Geolocation
     function GeoonSuccess(position) {
@@ -157,6 +156,7 @@ function insertar_contenido(item,total) {
     tx.executeSql('INSERT INTO carreras (id_carrera,carrera,nro_carrera,carreras_totales,fecha,categoria,id_categoria,categoria_short,destacado,latitud,longitud,id_circuito,circuito,extension,imagen) Values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [item.id_carrera,item.carrera,item.nro_fecha,item.nro_fecha,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen], function(tx, results){ //funcion para mensaje
             console.log("insert nro: " + numero_insert);
             console.log("insert data: " + item.id_carrera+ " " +item.carrera+ " " +item.nro_fecha+ " " +item.nro_fecha+ " " +item.fecha+ " " +item.categoria+ " " +item.categoria_id+ " " +item.categoria_short+ " " +item.destacado+ " " +item.latitud+ " " +item.longitud+ " " +item.circuito_id+ " " +item.circuito+ " " +item.extension+ " " +item.imagen);
+            numero_insercion(numero_insert,total);
             //muestro el html cuando se insertar el ultimo 
             if (total == numero_insert) {
                 mostrar_contenido();
@@ -165,6 +165,20 @@ function insertar_contenido(item,total) {
             ++numero_insert;
         },transaction_error);
     });
+}
+
+function numero_insercion(numero,total){
+    if (numero == 1) {
+        $("#insert_message").show();
+        $(".loading").hide();
+    }
+
+    $("#insert_message_text").text(numero);
+    
+    if (numero == total) {
+        $("#insert_message").hide();
+        $(".loading").show();
+    }
 }
 /*
 function traer_capitulo(id_serie) {
@@ -375,6 +389,8 @@ function mostrar_contenido_listado(id_categoria) {
 var hoy = new Date();
 var siguiente_carrera = 0;
 function get_listado_db(tx, result){
+    $("#nav_eventos").hide();
+    $("#nav_listado").show();
     var eventos = $('#eventos').empty();
     var categoria;
     console.log(result.rows.length);
@@ -389,8 +405,7 @@ function get_listado_db(tx, result){
                   '</div>' +
                 '</div>');        
     } else {
-
-        var row = result.rows.item;
+        get_category_nav(result.rows.item(0).categoria);
         for (var i = 0; i < result.rows.length; i++) {
             var distancia; var circuito; var nro_fecha; var destacado; var tipo_icono;
             var row = result.rows.item(i);
@@ -418,20 +433,14 @@ function get_listado_db(tx, result){
                 var fecha_carrera = new Date(row.fecha);
                 
                 if (hoy.getTime() > fecha_carrera.getTime()) {
-                   tipo_icono = '<i class="fa fa-check-circle tipo_icono"></i>';
-                    ++siguiente_carrera;
-
-                } else if (siguiente_carrera == 1){ 
-                    tipo_icono = '<i class="fa fa-dot-circle-o tipo_icono"></i>';
-                    --siguiente_carrera;
-
-                } else {
-                    if (i == 0) { //si empieza el torneo marcamos la 1era carrera
-                        tipo_icono = '<i class="fa fa-dot-circle-o tipo_icono"></i>';
+                   tipo_icono = '<i class="material-icons">done</i>';
+                }  else {
+                     ++siguiente_carrera;
+                    if (i == 0 || siguiente_carrera == 1) { //si empieza el torneo marcamos la 1era carrera
+                        tipo_icono = '<i class="material-icons">adjust</i>';
                     } else {
-                        tipo_icono = '<i class="fa fa-circle-o tipo_icono"></i>';
+                        tipo_icono = '<i class="material-icons">radio_button_unchecked</i>';
                     }
-                    --siguiente_carrera;
                 }
                 //contenido body
                 eventos.append('<div class="row valign-wrapper borde">'+
@@ -450,16 +459,15 @@ function get_listado_db(tx, result){
         } //for
     }//else        
 }
-/*
+
 function get_category_nav(categoria){
-    $(".button-collapse").hide();
-    $("#arrow").show();
-    $("#rango_fechas").addClass('brand-logo');
-    $("#rango_fechas").text('category/' + categoria); 
+    $("#category_text").text('Category/' + categoria); 
 }
 
-$(document).on('click', '#arrow', function(event) {
+$(document).on('click', '#arrow23', function(event) {
   event.preventDefault();
-  mostrar_contenido();
+    $("#nav_listado").hide();
+    $("#nav_eventos").show();
+    mostrar_contenido();
 });
-*/
+

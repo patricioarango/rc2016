@@ -38,3 +38,7 @@
 #rango_fechas {
 	padding-top: 5px;
 }
+
+#nav_listado,#insert_message {
+  display: none;
+}
