@@ -10,7 +10,7 @@
   <title>Your Website</title>
    <link rel="stylesheet" type="text/css" href="css/materialize.min.css" />
    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
-   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
 </head>
 <body>
   <header>
@@ -164,7 +164,9 @@ Date.prototype.yyyymmdd = function() {
 var a = Math.floor(Date.now() / 1000);
 console.log(a);
 
-
+$(document).ready(function() {
+    $("#insert_message").show();
+});
 
         </script>    
 </body>
