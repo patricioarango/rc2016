@@ -145,8 +145,9 @@ function traer_contenido(){
             });
         },"json");
     } else {
-        //navigator.notification.alert("Necesitamos conexion para el primer uso", funcionvacia);
-        console.log("aca");
+        navigator.notification.alert("Necesitamos conexion para el primer uso", traer_contenido);
+        //Materialize.toast('Necesitamos conexion para el primer uso', 4000)
+        console.log("no hay conexion para primer uso");
     }
 }
 
