@@ -145,7 +145,7 @@ function traer_contenido(){
             });
         },"json");
     } else {
-        navigator.notification.alert("Necesitamos conexion para el primer uso", traer_contenido);
+        navigator.notification.alert("Necesitamos conexion para el primer uso", mostrar_contenido,"De 0 a 100 km/h", "Reintentar");
         //Materialize.toast('Necesitamos conexion para el primer uso', 4000)
         console.log("no hay conexion para primer uso");
     }
