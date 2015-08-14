@@ -475,6 +475,7 @@ function get_category_nav(categoria){
 
 $(document).on('click', '#arrow23', function(event) {
   event.preventDefault();
+    console.log("volver");
     $("#nav_listado").hide();
     $("#nav_eventos").show();
     mostrar_contenido();
