@@ -47,6 +47,8 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         $(".button-collapse").sideNav({menuWidth: 240, activationWidth: 70});
+        $("#nav_listado").hide();
+        $("#insert_message").hide();
         app.receivedEvent('deviceready');
         chequearconexion();
     },
@@ -208,7 +210,7 @@ function get_contenido_db(tx, result) {
                   '<div class="col s12 m12">' +
                     '<div class="card">' +
                       '<div class="card-content no_eventos">' +
-                          '<i class="mdi-alert-warning"></i> No events this week.' +
+                          '<i class="material-icons">&#xE002;</i> No events this week.' +
                       '</div>' +
                     '</div>' +
                   '</div>' +
@@ -229,7 +231,7 @@ function get_contenido_db(tx, result) {
             }
             //destacados
             if (row.destacado == "1") {
-                 destacado = '<i class="medium mdi-action-stars right blue-text  text-accent-3"></i>' ;
+                 destacado = '<i class="material-icons medium right blue-text  text-accent-3">&#xE8D0;</i>' ;
             }
             else {
                  destacado = "";
@@ -240,12 +242,12 @@ function get_contenido_db(tx, result) {
                 var lon = window.localStorage.getItem("rc2016_lon");
                 var p1 = LatLon(Geo.parseDMS(lat), Geo.parseDMS(lon));
                 var p2 = LatLon(Geo.parseDMS(row.latitud), Geo.parseDMS(row.longitud));
-                distancia = '<i class="mdi-maps-place">' + Math.ceil(p1.distanceTo(p2)) + " </i> kms ";
-                circuito = '<i class="mdi-maps-directions-car"></i> ' + row.circuito;
+                distancia = '<i class="material-icons">&#xE0C8;</i> ' + Math.ceil(p1.distanceTo(p2)) + "  kms ";
+                circuito = '<i class="material-icons">&#xE531;</i> ' + row.circuito;
             }
             else {
-                distancia = '<i class="mdi-communication-location-off"></i>';
-                circuito = '<i class="mdi-maps-directions-car"></i> - ';
+                distancia = '<i class="material-icons">&#xE0C7;</i>';
+                circuito = '<i class="material-icons">&#xE531;</i> - ';
             }
             if (row.nro_carrera > 0 ){
                 nro_fecha = " Round" + row.nro_carrera;
@@ -268,7 +270,7 @@ function get_contenido_db(tx, result) {
                               '</div>' +
                               '<div class="card-content">' +
                                 '<div class="col s10">' +
-                                  '<p><i class="mdi-action-today"></i><strong>'+ monthNames[parseInt(row.mes)] + parseInt(row.dia) +' </strong>'+ nro_fecha + '</p>' +
+                                  '<p><i class="material-icons">today</i><strong>'+ monthNames[parseInt(row.mes)] + parseInt(row.dia) +' </strong>'+ nro_fecha + '</p>' +
                                   '<p>' + distancia + '</p>' +
                                   '<p>' + circuito + '</p>' +
                                 '</div>'  +
@@ -342,7 +344,13 @@ function sync_process(){
                 console.log("no new data to sync");
             } else {
                 $.each(data, function(i, item) {
-                    insertar_contenido_sync(item, data.length);
+                    if (item.tipo_sentencia == 'UPDATE') {
+                        updatear_contenido_sync(item, data.length);
+                    } else if (item.tipo_sentencia == 'INSERT'){
+                        insertar_contenido_sync(item, data.length);
+                    } else if (item.tipo_sentencia == 'DELETE'){
+                        borrar_contenido_sync(item, data.length);
+                    }
                     //console.log(item);
                     //console.log(data.length);
                 });
@@ -354,7 +362,7 @@ function sync_process(){
 }
 
 numero_insert_sync = 1;
-function insertar_contenido_sync(item,total) {
+function updatear_contenido_sync(item,total) {
     $(".loading").toggle();
     var a = Math.floor(Date.now() / 1000);
     db.transaction(function(tx) {
@@ -425,7 +433,7 @@ function get_listado_db(tx, result){
                 }
                 //destacados
                 if (row.destacado == "1") {
-                    destacado = '<i class="small mdi-action-stars right"></i>';
+                    destacado = '<i class="material-icons right">&#xE8D0;</i>';
                 }
                 else {
                      destacado = '';
@@ -434,7 +442,7 @@ function get_listado_db(tx, result){
                 var fecha_carrera = new Date(row.fecha);
                 
                 if (hoy.getTime() > fecha_carrera.getTime()) {
-                   tipo_icono = '<i class="material-icons">done</i>';
+                   tipo_icono = '<i class="material-icons">&#xE86C;</i>';
                 }  else {
                      ++siguiente_carrera;
                     if (i == 0 || siguiente_carrera == 1) { //si empieza el torneo marcamos la 1era carrera
