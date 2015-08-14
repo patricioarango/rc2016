@@ -48,7 +48,7 @@ var app = {
     onDeviceReady: function() {
         $(".button-collapse").sideNav({menuWidth: 240, activationWidth: 70});
         $("#nav_listado").hide();
-        $("#insert_message").hide();
+        //$("#insert_message").hide();
         app.receivedEvent('deviceready');
         chequearconexion();
     },
@@ -82,7 +82,7 @@ function chequearconexion(){
 
 function geolocalizar(){
     console.log("geolocalizando...");
-    var geooptions = { maximumAge: 600000, timeout: 10000, enableHighAccuracy: true};
+    var geooptions = { maximumAge: 600000, timeout: 7500, enableHighAccuracy: true};
     navigator.geolocation.getCurrentPosition(GeoonSuccess, GeoonError,geooptions);
 }
     // onSuccess Geolocation
@@ -331,6 +331,7 @@ Date.prototype.yyyymmdd = function() {
   var dd  = this.getDate().toString();
   return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 };
+
 /*
 function sync_process(){
     var hay_conexion = window.localStorage.getItem("rc2016_conexion");
@@ -363,7 +364,7 @@ function sync_process(){
 
 numero_insert_sync = 1;
 function updatear_contenido_sync(item,total) {
-    $(".loading").toggle();
+    $(".loading").show();
     var a = Math.floor(Date.now() / 1000);
     db.transaction(function(tx) {
     tx.executeSql(item.sentencia, [item.carrera,item.nro_carrera,item.carreras_totales,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen,item.id_carrera], function(tx, results){ //funcion para mensaje
@@ -373,13 +374,48 @@ function updatear_contenido_sync(item,total) {
                 //ultima actualizacion
                 window.localStorage.setItem("rc2016_last_act", a);
                 console.log("ultima actualizacion: " + a);
-                $(".loading").toggle();
+                $(".loading").hide();
             }
             ++numero_insert_sync;
         },transaction_error);
     });
 }
 
+function insertar_contenido_sync(item,total) {
+    $(".loading").show();
+    var a = Math.floor(Date.now() / 1000);
+    db.transaction(function(tx) {
+    tx.executeSql(item.sentencia, [item.id_carrera,item.carrera,item.nro_carrera,item.carreras_totales,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen], function(tx, results){ //funcion para mensaje
+            //muestro el html cuando se insertar el ultimo 
+            if (total == numero_insert_sync) {
+                mostrar_contenido();
+                //ultima actualizacion
+                window.localStorage.setItem("rc2016_last_act", a);
+                console.log("ultima actualizacion: " + a);
+                $(".loading").hide();
+            }
+            ++numero_insert_sync;
+        },transaction_error);
+    });
+}
+
+function borrar_contenido_sync(item,total) {
+    $(".loading").show();
+    var a = Math.floor(Date.now() / 1000);
+    db.transaction(function(tx) {
+    tx.executeSql(item.sentencia, [item.id_carrera], function(tx, results){ //funcion para mensaje
+            //muestro el html cuando se insertar el ultimo 
+            if (total == numero_insert_sync) {
+                mostrar_contenido();
+                //ultima actualizacion
+                window.localStorage.setItem("rc2016_last_act", a);
+                console.log("ultima actualizacion: " + a);
+                $(".loading").hide();
+            }
+            ++numero_insert_sync;
+        },transaction_error);
+    });
+}
 */
 
 // click de card
@@ -473,7 +509,7 @@ function get_category_nav(categoria){
     $("#category_text").text('Category/' + categoria); 
 }
 
-$(document).on('click', '#arrow23', function(event) {
+$("header").on('click', '#arrow23', function(event) {
   event.preventDefault();
     console.log("volver");
     $("#nav_listado").hide();
