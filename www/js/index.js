@@ -48,7 +48,7 @@ var app = {
     onDeviceReady: function() {
         $(".button-collapse").sideNav({menuWidth: 240, activationWidth: 70});
         $("#nav_listado").hide();
-        //$("#insert_message").hide();
+        $("#insert_message").hide();
         app.receivedEvent('deviceready');
         chequearconexion();
     },
@@ -317,7 +317,7 @@ function get_dias_periodo() {
     domingo = new Date(now.setDate(now.getDate() - now.getDay() + 7));
 
     $rango_fechas.empty();
-    $rango_fechas.append('<span class="flow-text" style="font-size:1.9em;"><i class="mdi-hardware-keyboard-arrow-left anterior_se"></i><strong>' + monthNames[(lunes.getMonth()+1)] + '</strong>' + lunes.getDate() + '<strong>/' + monthNames[(domingo.getMonth()+1)] + '</strong>' + domingo.getDate() + ' <i class="mdi-hardware-keyboard-arrow-right siguiente_se"></i></span>');
+    $rango_fechas.append('<span class="flow-text" style="font-size:1.9em;"><i class="mdi-hardware-keyboard-arrow-left anterior_se"></i><strong>' + monthNames[(lunes.getMonth()+1)] + '</strong>' + lunes.getDate() + '<strong> / ' + monthNames[(domingo.getMonth()+1)] + '</strong>' + domingo.getDate() + ' <i class="mdi-hardware-keyboard-arrow-right siguiente_se"></i></span>');
 
     return {
         "fecha_inicial": lunes.yyyymmdd(),
@@ -450,7 +450,11 @@ function get_listado_db(tx, result){
                   '</div>' +
                 '</div>');        
     } else {
-        get_category_nav(result.rows.item(0).categoria);
+        if (result.rows.item(0).length > 19) { //nombre de categoria largo o corto
+            get_category_nav(result.rows.item(0).categoria_short);
+        } else {
+            get_category_nav(result.rows.item(0).categoria);
+        }
         for (var i = 0; i < result.rows.length; i++) {
             var distancia; var circuito; var nro_fecha; var destacado; var tipo_icono;
             var row = result.rows.item(i);
@@ -478,13 +482,13 @@ function get_listado_db(tx, result){
                 var fecha_carrera = new Date(row.fecha);
                 
                 if (hoy.getTime() > fecha_carrera.getTime()) {
-                   tipo_icono = '<i class="material-icons">&#xE86C;</i>';
+                   tipo_icono = '<i class="material-icons small">&#xE86C;</i>';
                 }  else {
                      ++siguiente_carrera;
                     if (i == 0 || siguiente_carrera == 1) { //si empieza el torneo marcamos la 1era carrera
-                        tipo_icono = '<i class="material-icons">adjust</i>';
+                        tipo_icono = '<i class="material-icons small">&#xE39E;</i>';
                     } else {
-                        tipo_icono = '<i class="material-icons">&#xE836;</i>';
+                        tipo_icono = '<i class="material-icons small">&#xE836;</i>';
                     }
                 }
                 //contenido body
@@ -509,11 +513,11 @@ function get_category_nav(categoria){
     $("#category_text").text('Category/' + categoria); 
 }
 
-$("header").on('click', '#arrow23', function(event) {
-  event.preventDefault();
+$("#nav_listado").click(function(event) {
     console.log("volver");
     $("#nav_listado").hide();
     $("#nav_eventos").show();
     mostrar_contenido();
 });
+
 
