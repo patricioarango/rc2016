@@ -133,6 +133,7 @@ function funcionvacia(){
 
 function transaction_error(tx, error) {
     console.log('OKA: ' + error.message + ' code: ' + error.code);
+    $(".loading").hide();
 }
 
 function traer_contenido(){
@@ -283,7 +284,7 @@ function get_contenido_db(tx, result) {
                         '</div>');            
         } // for
     } //else
-    //sync_process();
+    sync_process();
 }
 
 $("#rango_fechas").on('click',".anterior_se",function(e) {
@@ -332,7 +333,7 @@ Date.prototype.yyyymmdd = function() {
   return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 };
 
-/*
+
 function sync_process(){
     var hay_conexion = window.localStorage.getItem("rc2016_conexion");
     var a = window.localStorage.getItem("rc2016_last_act");
@@ -346,11 +347,11 @@ function sync_process(){
             } else {
                 $.each(data, function(i, item) {
                     if (item.tipo_sentencia == 'UPDATE') {
-                        updatear_contenido_sync(item, data.length);
+                        updatear_contenido_sync(item, data[0].resultados, i);
                     } else if (item.tipo_sentencia == 'INSERT'){
-                        insertar_contenido_sync(item, data.length);
+                        insertar_contenido_sync(item, data[0].resultados, i);
                     } else if (item.tipo_sentencia == 'DELETE'){
-                        borrar_contenido_sync(item, data.length);
+                        borrar_contenido_sync(item, data[0].resultados, i);
                     }
                     //console.log(item);
                     //console.log(data.length);
@@ -362,61 +363,60 @@ function sync_process(){
     }
 }
 
-numero_insert_sync = 1;
-function updatear_contenido_sync(item,total) {
+function updatear_contenido_sync(item,total,numero_insert_sync) {
     $(".loading").show();
+    console.log("syncing update");
     var a = Math.floor(Date.now() / 1000);
     db.transaction(function(tx) {
     tx.executeSql(item.sentencia, [item.carrera,item.nro_carrera,item.carreras_totales,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen,item.id_carrera], function(tx, results){ //funcion para mensaje
             //muestro el html cuando se insertar el ultimo 
             if (total == numero_insert_sync) {
-                mostrar_contenido();
                 //ultima actualizacion
                 window.localStorage.setItem("rc2016_last_act", a);
                 console.log("ultima actualizacion: " + a);
                 $(".loading").hide();
+                mostrar_contenido();
             }
-            ++numero_insert_sync;
         },transaction_error);
     });
 }
 
-function insertar_contenido_sync(item,total) {
+function insertar_contenido_sync(item,total,numero_insert_sync) {
     $(".loading").show();
+    console.log("syncing insert");
     var a = Math.floor(Date.now() / 1000);
     db.transaction(function(tx) {
     tx.executeSql(item.sentencia, [item.id_carrera,item.carrera,item.nro_carrera,item.carreras_totales,item.fecha,item.categoria,item.categoria_id,item.categoria_short,item.destacado,item.latitud,item.longitud,item.circuito_id,item.circuito,item.extension,item.imagen], function(tx, results){ //funcion para mensaje
             //muestro el html cuando se insertar el ultimo 
             if (total == numero_insert_sync) {
-                mostrar_contenido();
                 //ultima actualizacion
                 window.localStorage.setItem("rc2016_last_act", a);
                 console.log("ultima actualizacion: " + a);
                 $(".loading").hide();
+                mostrar_contenido();
             }
-            ++numero_insert_sync;
         },transaction_error);
     });
 }
 
-function borrar_contenido_sync(item,total) {
+function borrar_contenido_sync(item,total,numero_insert_sync) {
     $(".loading").show();
+    console.log("syncing delete");
     var a = Math.floor(Date.now() / 1000);
     db.transaction(function(tx) {
     tx.executeSql(item.sentencia, [item.id_carrera], function(tx, results){ //funcion para mensaje
             //muestro el html cuando se insertar el ultimo 
             if (total == numero_insert_sync) {
-                mostrar_contenido();
                 //ultima actualizacion
                 window.localStorage.setItem("rc2016_last_act", a);
                 console.log("ultima actualizacion: " + a);
                 $(".loading").hide();
+                mostrar_contenido();
             }
-            ++numero_insert_sync;
         },transaction_error);
     });
 }
-*/
+
 
 // click de card
 $("#eventos").on('click',".card",function(e) {
@@ -450,7 +450,7 @@ function get_listado_db(tx, result){
                   '</div>' +
                 '</div>');        
     } else {
-        if (result.rows.item(0).length > 19) { //nombre de categoria largo o corto
+        if (result.rows.item(0).length > 15) { //nombre de categoria largo o corto
             get_category_nav(result.rows.item(0).categoria_short);
         } else {
             get_category_nav(result.rows.item(0).categoria);
