@@ -49,6 +49,8 @@ var app = {
         $(".button-collapse").sideNav({menuWidth: 240, activationWidth: 70});
         $("#nav_listado").hide();
         $("#insert_message").hide();
+        document.addEventListener("online", onOnline, false);
+        document.addEventListener("offline", onOffline, false);        
         app.receivedEvent('deviceready');
         chequearconexion();
     },
@@ -57,6 +59,14 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+
+function onOnline(){
+    window.localStorage.setItem("rc2016_conexion", "1");
+}
+
+function onOffline(){
+    window.localStorage.setItem("rc2016_conexion", "0");
+}
 
 function chequearconexion(){
     var networkState = navigator.connection.type;
@@ -133,7 +143,6 @@ function funcionvacia(){
 
 function transaction_error(tx, error) {
     console.log('OKA: ' + error.message + ' code: ' + error.code);
-    $(".loading").hide();
 }
 
 function traer_contenido(){
@@ -364,7 +373,6 @@ function sync_process(){
 }
 
 function updatear_contenido_sync(item,total,numero_insert_sync) {
-    $(".loading").show();
     console.log("syncing update");
     var a = Math.floor(Date.now() / 1000);
     db.transaction(function(tx) {
@@ -374,7 +382,6 @@ function updatear_contenido_sync(item,total,numero_insert_sync) {
                 //ultima actualizacion
                 window.localStorage.setItem("rc2016_last_act", a);
                 console.log("ultima actualizacion: " + a);
-                $(".loading").hide();
                 mostrar_contenido();
             }
         },transaction_error);
@@ -382,7 +389,6 @@ function updatear_contenido_sync(item,total,numero_insert_sync) {
 }
 
 function insertar_contenido_sync(item,total,numero_insert_sync) {
-    $(".loading").show();
     console.log("syncing insert");
     var a = Math.floor(Date.now() / 1000);
     db.transaction(function(tx) {
@@ -392,7 +398,6 @@ function insertar_contenido_sync(item,total,numero_insert_sync) {
                 //ultima actualizacion
                 window.localStorage.setItem("rc2016_last_act", a);
                 console.log("ultima actualizacion: " + a);
-                $(".loading").hide();
                 mostrar_contenido();
             }
         },transaction_error);
@@ -400,7 +405,6 @@ function insertar_contenido_sync(item,total,numero_insert_sync) {
 }
 
 function borrar_contenido_sync(item,total,numero_insert_sync) {
-    $(".loading").show();
     console.log("syncing delete");
     var a = Math.floor(Date.now() / 1000);
     db.transaction(function(tx) {
@@ -410,7 +414,6 @@ function borrar_contenido_sync(item,total,numero_insert_sync) {
                 //ultima actualizacion
                 window.localStorage.setItem("rc2016_last_act", a);
                 console.log("ultima actualizacion: " + a);
-                $(".loading").hide();
                 mostrar_contenido();
             }
         },transaction_error);
