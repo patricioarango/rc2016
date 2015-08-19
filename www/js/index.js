@@ -353,6 +353,9 @@ function sync_process(){
         $.post(url, function(data) {
             if (data[0].resultados == 0) {
                 console.log("no new data to sync");
+                var a = Math.floor(Date.now() / 1000);
+                window.localStorage.setItem("rc2016_last_act", a);
+                console.log("ultima actualizacion: " + a);
             } else {
                 $.each(data, function(i, item) {
                     if (item.tipo_sentencia == 'UPDATE') {
