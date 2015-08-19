@@ -456,7 +456,7 @@ function get_listado_db(tx, result){
                   '</div>' +
                 '</div>');        
     } else {
-        if (result.rows.item(0).length > 15) { //nombre de categoria largo o corto
+        if (result.rows.item(0).categoria.length > 15) { //nombre de categoria largo o corto
             get_category_nav(result.rows.item(0).categoria_short);
         } else {
             get_category_nav(result.rows.item(0).categoria);
