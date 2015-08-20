@@ -524,7 +524,7 @@ function get_listado_db(tx, result){
 }
 
 function get_category_nav(categoria){
-    $("#category_text").text('Category/' + categoria); 
+    $("#category_text").html('<span style="font-weight:200;">category / </span>' + categoria); 
 }
 
 $("#nav_listado").click(function(event) {
