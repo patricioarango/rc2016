@@ -436,6 +436,7 @@ $(document).on('click',".side_click",function(e) {
    e.preventDefault();
    console.log("listado:" + $(this).data("id_categoria"));
    mostrar_contenido_listado($(this).data("id_categoria"));
+   $("#sidenav-overlay").trigger("click");
 });
 
 function mostrar_contenido_listado(id_categoria) {
