@@ -431,6 +431,13 @@ $("#eventos").on('click',".card",function(e) {
    mostrar_contenido_listado($(this).data("id_categoria"));
 });
 
+// click de sidebar
+$(document).on('click',".side_click",function(e) {
+   e.preventDefault();
+   console.log("listado:" + $(this).data("id_categoria"));
+   mostrar_contenido_listado($(this).data("id_categoria"));
+});
+
 function mostrar_contenido_listado(id_categoria) {
     db.transaction(function(tx) {
     tx.executeSql("SELECT *,strftime('%m', fecha) as mes,strftime('%d', fecha) as dia FROM carreras where id_categoria=?", [id_categoria],get_listado_db,funcionvacia(),transaction_error);
