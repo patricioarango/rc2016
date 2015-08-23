@@ -34,10 +34,17 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-       console.log("andando");
-    },
-    
+       var pushNotification = window.plugins.pushNotification;
+pushNotification.register(app.successHandler, app.errorHandler,{"senderID":"AIzaSyA5npvw51quTUQduYE44hAyaWG0Lz0ZbXA","ecb":"app.onNotificationGCM"});
 
+    },
+    // result contains any message sent from the plugin call
+successHandler: function(result) {
+    alert('Callback Success! Result = '+result)
+},
+errorHandler:function(error) {
+    alert(error);
+},
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         console.log('Received Event: ' + id);
