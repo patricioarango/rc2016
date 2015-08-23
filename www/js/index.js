@@ -35,8 +35,8 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
        var pushNotification = window.plugins.pushNotification;
-pushNotification.register(app.successHandler, app.errorHandler,{"senderID":"AIzaSyA5npvw51quTUQduYE44hAyaWG0Lz0ZbXA","ecb":"app.onNotificationGCM"});
-
+pushNotification.register(app.successHandler, app.errorHandler,{"senderID":"391779146922","ecb":"app.onNotificationGCM"});
+//id puede ser 391779146922 AIzaSyA5npvw51quTUQduYE44hAyaWG0Lz0ZbXA
     },
     // result contains any message sent from the plugin call
 successHandler: function(result) {
@@ -51,6 +51,7 @@ onNotificationGCM: function(e) {
             case 'registered':
                 if ( e.regid.length > 0 )
                 {
+                    //hago un post, mando el token, recibo el id de mi base y lo guardo con localstorage. Pongo una variable registrado 1 para no volver a hacer el proceso.
                     console.log("Regid " + e.regid);
                     alert('registration id = '+e.regid);
                 }
