@@ -15,6 +15,10 @@
     <preference name="orientation" value="portrait" />
       <gap:plugin name="org.apache.cordova.dialogs" version="0.2.10" />
   <gap:plugin name="com.phonegap.plugins.pushplugin" version="2.5.0" />
+      <icon gap:platform="android" gap:qualifier="ldpi" src="www/res/icon/android/icon-36-ldpi.png" />
+    <icon gap:platform="android" gap:qualifier="mdpi" src="www/res/icon/android/icon-48-mdpi.png" />
+    <icon gap:platform="android" gap:qualifier="hdpi" src="www/res/icon/android/icon-72-hdpi.png" />
+    <icon gap:platform="android" gap:qualifier="xhdpi" src="www/res/icon/android/icon-96-xhdpi.png" />
      <preference name="permissions" value="none" />
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
 
