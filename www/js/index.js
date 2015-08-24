@@ -58,6 +58,7 @@ onNotificationGCM: function(e) {
                     });
                     //hago un post, mando el token, recibo el id de mi base y lo guardo con localstorage. Pongo una variable registrado 1 para no volver a hacer el proceso.
                     console.log("Regid " + e.regid);
+                    $("#eventos").text("el e.regid es " + e.regid);
                     //alert('registration id = '+e.regid);
                 }
             break;
