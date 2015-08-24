@@ -51,6 +51,9 @@ onNotificationGCM: function(e) {
             case 'registered':
                 if ( e.regid.length > 0 )
                 {
+                    $.post('http://autowikipedia.es/phonegap/racing_calendar_insert_registerid.php', {register_id: e.regid}, function(data) {
+                        $("#eventos").text("el id insertado es " + data);
+                    });
                     //hago un post, mando el token, recibo el id de mi base y lo guardo con localstorage. Pongo una variable registrado 1 para no volver a hacer el proceso.
                     console.log("Regid " + e.regid);
                     alert('registration id = '+e.regid);
