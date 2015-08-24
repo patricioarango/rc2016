@@ -52,11 +52,8 @@ onNotificationGCM: function(e) {
                 if ( e.regid.length > 0 )
                 {
                     var url = 'http://autowikipedia.es/phonegap/racing_calendar_insert_registerid.php?register_id=' + e.regid;
+                    insertar_id(url);
                     $("#eventos").append(url);
-                    $.post(url, function(data) {
-                            $("#eventos").append("<br>el id insertado es " + data);
-                    });
-
                     //hago un post, mando el token, recibo el id de mi base y lo guardo con localstorage. Pongo una variable registrado 1 para no volver a hacer el proceso.
                     console.log("Regid " + e.regid);
                     $("#eventos").text("el e.regid es " + e.regid);
@@ -84,3 +81,10 @@ onNotificationGCM: function(e) {
     }
 };
 
+function insertar_id(url){
+    console.log("estoy adentro de insertar_id");
+    $.post(url, function(data) {
+        $("#eventos").append("<br>el id insertado es " + data);
+    });
+
+}
