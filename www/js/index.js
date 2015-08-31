@@ -34,57 +34,10 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-       var pushNotification = window.plugins.pushNotification;
-pushNotification.register(app.successHandler, app.errorHandler,{"senderID":"391779146922","ecb":"app.onNotificationGCM"});
-//id puede ser 391779146922 AIzaSyA5npvw51quTUQduYE44hAyaWG0Lz0ZbXA
-    },
-    // result contains any message sent from the plugin call
-successHandler: function(result) {
-    console.log('Callback Success! Result = '+result);
-},
-errorHandler:function(error) {
-    console.log(error);
-},
-onNotificationGCM: function(e) {
-        switch( e.event )
-        {
-            case 'registered':
-                if ( e.regid.length > 0 )
-                {
-                    var url = 'http://autowikipedia.es/phonegap/racing_calendar_insert_registerid.php?register_id=' + e.regid;
-                    insertar_id(url);
-                    $("#eventos").append(url);
-                    //hago un post, mando el token, recibo el id de mi base y lo guardo con localstorage. Pongo una variable registrado 1 para no volver a hacer el proceso.
-                    console.log("Regid " + e.regid);
-                    $("#eventos").text("el e.regid es " + e.regid);
-                    //alert('registration id = '+e.regid);
-                }
-            break;
- 
-            case 'message':
-              // this is the actual push notification. its format depends on the data model from the push server
-              alert('message = '+e.message+' msgcnt = '+e.msgcnt);
-            break;
- 
-            case 'error':
-              alert('GCM error = '+e.msg);
-            break;
- 
-            default:
-              alert('An unknown GCM event has occurred');
-              break;
-        }
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        console.log('Received Event: ' + id);
+        var push = PushNotification.init({ "android": {"senderID": "391779146922"},"ios": {}, "windows": {} } );
+        push.on('registration', function(data) {
+            alert(data.registrationId);
+        });
     }
 };
 
-function insertar_id(url){
-    console.log("estoy adentro de insertar_id");
-    $.post(url, function(data) {
-        $("#eventos").append("<br>el id insertado es " + data);
-    });
-
-}
