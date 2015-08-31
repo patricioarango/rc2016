@@ -45,7 +45,11 @@ function insertar_id(registrationId){
     var url = 'http://autowikipedia.es/phonegap/racing_calendar_insert_registerid.php?register_id=' + registrationId;
     console.log("estoy adentro de insertar_id");
     $.post(url, function(data) {
-        $("#eventos").append("la respuesta del server es " + data);
+        if (data == "OK") {
+            $("#eventos").append('oka');
+        } else {
+            $("#eventos").append('ya estaba');
+        }
     });
 
 }
