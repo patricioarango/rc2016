@@ -15,7 +15,7 @@
     <preference name="orientation" value="portrait" />
       <gap:plugin name="org.apache.cordova.dialogs" version="0.2.10" />
 <gap:plugin name="phonegap-plugin-push" source="npm" />
-<gap:plugin name="cordova-plugin-whitelist" source="npm" SENDER_ID="391779146922" />
+<gap:plugin name="cordova-plugin-whitelist" source="npm" />
       <icon gap:platform="android" gap:qualifier="ldpi" src="res/icon/android/icon-36-ldpi.png" />
     <icon gap:platform="android" gap:qualifier="mdpi" src="res/icon/android/icon-48-mdpi.png" />
     <icon gap:platform="android" gap:qualifier="hdpi" src="res/icon/android/icon-72-hdpi.png" />
