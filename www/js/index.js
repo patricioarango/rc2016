@@ -34,7 +34,6 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-<<<<<<< HEAD
        var pushNotification = window.plugins.pushNotification;
 pushNotification.register(app.successHandler, app.errorHandler,{"senderID":"391779146922","ecb":"app.onNotificationGCM"});
 //id puede ser 391779146922 AIzaSyA5npvw51quTUQduYE44hAyaWG0Lz0ZbXA
@@ -79,17 +78,16 @@ onNotificationGCM: function(e) {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         console.log('Received Event: ' + id);
-=======
+
         var push = PushNotification.init({ "android": {"senderID": "391779146922"},"ios": {}, "windows": {} } );
         push.on('registration', function(data) {
             insertar_id(data.registrationId)
         });
->>>>>>> 9d5912a3b5961c01c9905e5724186e173306d380
     }
 };
 
 function insertar_id(registrationId){
-    var url = 'http://autowikipedia.es/phonegap/racing_calendar_insert_registerid.php?register_id=' + registrationId;
+    var url = 'http://autowikipedia.es/phonegap/insert_registerid/' + registrationId + '/brain';
     console.log("estoy adentro de insertar_id");
     $.post(url, function(data) {
         if (data == "OK") {
