@@ -14,7 +14,7 @@
 </head>
 <body>
   <header>
-<!--  <div class="navbar-fixed">
+ <div class="navbar-fixed">
   <nav class="blue lighten-1" id="nav_ppal">
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <i class="material-icons" id="arrow" style="display:none;">arrow_back</i>
@@ -27,15 +27,15 @@
       </ul>
   <div class="center valign" id="rango_fechas" data-posicion="0"></div>      
   </nav>
-  </div> -->
-
+  </div> 
+<!--
 <div class="navbar-fixed" id="nav_listado">
   <nav class="blue lighten-1">   
     <i id="arrow23" class="material-icons small">&#xE5C4;</i>
     <div class="brand-logo center" id="category_text"><span style="font-weight:200;">category / </span><span>Formula 111111</span></div>   
   </nav>  
 </div>
-
+-->
 </header>  
   <!-- 
 <div class="progress">
@@ -130,20 +130,35 @@ function get_dias_periodo() {
     var $rango_fechas = $("#rango_fechas");
     var semana = $("#rango_fechas").data("posicion");
     var now = new Date();
+    var n = now.getDay();
     var lunes; var lun; var domingo; var dom;
-    if (semana < 0) {
-      lunes = new Date(now.setDate(now.getDate() - now.getDay() + 1 + (semana * 7)));
-      lun = lunes.getMonth();
+
+    if (n == 0) { //si es domingo mostramos las carreras de hoy
+      lunes = new Date();
+      domingo = new Date(now.setDate(now.getDate() - now.getDay() + 1));
     } else {
-      lunes = new Date(now.setDate(now.getDate() - now.getDay() + (1 + (semana * 7))));
-      lun = lunes.getMonth();
-    }
+      if (semana < 0) {
+        lunes = new Date(now.setDate(now.getDate() - now.getDay() + 1 + (semana * 7)));
+        lun = lunes.getMonth();
+      } else {
+        lunes = new Date(now.setDate(now.getDate() - now.getDay() + (1 + (semana * 7))));
+        lun = lunes.getMonth();
+      }
     //el domingo siempre son 7 dias a partir del lunes establecido
     domingo = new Date(now.setDate(now.getDate() - now.getDay() + 7));
     dom = domingo.getMonth();
+    }
+  
     
-    $rango_fechas.empty();
-    $rango_fechas.append('<span class="flow-text" style="font-size:1.9em;"><i class="mdi-hardware-keyboard-arrow-left anterior_se"></i><strong>' + monthNames[lun] + '</strong>' + lunes.getDate() + '<strong>/' + monthNames[dom] + '</strong>' + domingo.getDate() + ' <i class="mdi-hardware-keyboard-arrow-right siguiente_se"></i></span>');
+   $rango_fechas.empty();
+
+    //si es domingo ponemos TODAY
+    if (n == 0) { 
+      $rango_fechas.append('<span class="flow-text" style="font-size:1.9em;"><i class="mdi-hardware-keyboard-arrow-left anterior_se"></i><strong>TODAY</strong><i class="mdi-hardware-keyboard-arrow-right siguiente_se"></i></span>');
+    } else {
+      $rango_fechas.append('<span class="flow-text" style="font-size:1.9em;"><i class="mdi-hardware-keyboard-arrow-left anterior_se"></i><strong>' + monthNames[lun] + '</strong>' + lunes.getDate() + '<strong>/' + monthNames[dom] + '</strong>' + domingo.getDate() + ' <i class="mdi-hardware-keyboard-arrow-right siguiente_se"></i></span>');
+    }
+
     return {
         "fecha_inicial": lunes.yyyymmdd(),
         "fecha_final": domingo.yyyymmdd()
@@ -158,14 +173,14 @@ Date.prototype.yyyymmdd = function() {
 };
 
 var a = Math.floor(Date.now() / 1000);
-console.log(a);
+//console.log(a);
 
 $(document).ready(function() {
     $("#insert_message").show();
 });
 
 var tc = "turismo carretera";
-console.log(tc.length + "aca");
+//console.log(tc.length + "aca");
         </script>    
 </body>
 </html>

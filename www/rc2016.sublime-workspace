@@ -4,6 +4,58 @@
 		"selected_items":
 		[
 			[
+				"fun",
+				"funcionvacia"
+			],
+			[
+				"categr",
+				"categoria"
+			],
+			[
+				"add",
+				"addClass	.addClass()"
+			],
+			[
+				"cate",
+				"cate_cont"
+			],
+			[
+				"va",
+				"valign"
+			],
+			[
+				"remo",
+				"removeClass	.removeClass()"
+			],
+			[
+				"padding-",
+				"padding-top"
+			],
+			[
+				"hay",
+				"hay_conexion"
+			],
+			[
+				"fech",
+				"fecha_final"
+			],
+			[
+				"fecha",
+				"fecha_inicial"
+			],
+			[
+				"pos",
+				"posicion_se"
+			],
+			[
+				"posi",
+				"posicion_inicial"
+			],
+			[
+				"resul",
+				"results"
+			],
+			[
 				"d",
 				"document"
 			],
@@ -108,10 +160,6 @@
 				"cred_p"
 			],
 			[
-				"fecha",
-				"fecha_desde"
-			],
-			[
 				"total",
 				"total_campania"
 			],
@@ -139,54 +187,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "index.html",
-			"settings":
-			{
-				"buffer_size": 2248,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/materialize.min.js",
-			"settings":
-			{
-				"buffer_size": 119846,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/scripts.js",
-			"settings":
-			{
-				"buffer_size": 420,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/patricio/Downloads/pull-to-refresh-master/index.html",
-			"settings":
-			{
-				"buffer_size": 807,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/patricio/Downloads/pull-to-refresh-master/app.js",
-			"settings":
-			{
-				"buffer_size": 1189,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/opt/lampp/htdocs/racing_calendar/www/index.html",
-			"settings":
-			{
-				"buffer_size": 2097,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -247,6 +247,33 @@
 	],
 	"file_history":
 	[
+		"/opt/lampp/htdocs/nuevocalendar/www/index.html",
+		"/opt/lampp/htdocs/racing_calendar/www/js/index.js",
+		"/opt/lampp/htdocs/nuevocalendar/www/js/index.js",
+		"/opt/lampp/htdocs/nuevocalendar/www/css/materialize.min.css",
+		"/opt/lampp/htdocs/racing_calendar/www/config.xml",
+		"/opt/lampp/htdocs/nuevocalendar/www/index2.html",
+		"/opt/lampp/htdocs/nuevocalendar/www/index3.html",
+		"/opt/lampp/htdocs/nuevocalendar/config.xml",
+		"/opt/lampp/htdocs/racing_calendar/config.xml",
+		"/home/patricio/Downloads/FUTURAR SITIO/index.html",
+		"/opt/lampp/htdocs/pauta/dir_conflicts.prej",
+		"/opt/lampp/htdocs/racing_calendar/www/listado.html",
+		"/opt/lampp/htdocs/racing_calendar/www/js/listado.js",
+		"/opt/lampp/htdocs/racing_calendar/www/css/listado.css",
+		"/opt/lampp/htdocs/racing_calendar/www/css/style.css",
+		"/opt/lampp/htdocs/racing_calendar/www/js/scripts.js",
+		"/opt/lampp/htdocs/test/racing_calendar_eventos_sync.php",
+		"/opt/lampp/htdocs/racing_calendar/www/index.html",
+		"/opt/lampp/htdocs/nuevocalendar/www/css/font-awesome.min.css",
+		"/opt/lampp/htdocs/nuevocalendar/www/js/materialize.min.js",
+		"/opt/lampp/htdocs/seriesmaker/www/js/index.js",
+		"/opt/lampp/htdocs/seriesmaker/www/js/dashboard.js",
+		"/opt/lampp/htdocs/nuevocalendar/www/css/index.css",
+		"/opt/lampp/htdocs/nuevocalendar/www/to_do.txt",
+		"/home/patricio/Downloads/pull-to-refresh-master/app.js",
+		"/home/patricio/Downloads/pull-to-refresh-master/index.html",
+		"/opt/lampp/htdocs/nuevocalendar/www/js/scripts.js",
 		"/opt/lampp/htdocs/pauta/application/views/ordenes/listado_ordenes.php",
 		"/opt/lampp/htdocs/pauta/application/views/reportes/ordenes_pautadas.php",
 		"/opt/lampp/htdocs/pauta/application/controllers/reportes.php",
@@ -347,38 +374,11 @@
 		"/opt/lampp/htdocs/pauta/application/controllers/recepcion/control_liquidaciones.php",
 		"/opt/lampp/htdocs/pauta/application/config/routes.php",
 		"/opt/lampp/htdocs/pauta/application/config/recepcion_ordenes.php",
-		"/opt/lampp/htdocs/pauta/application/views/facturas/comprobantes_asociados.php",
-		"/opt/lampp/htdocs/pauta/application/views/recepcion/control_proveedores/form_procesar_control_proveedores.php",
-		"/opt/lampp/htdocs/fuckapp/application/views/alta_usuarios.php",
-		"/opt/lampp/htdocs/fuckapp/application/controllers/Usuarios.php",
-		"/opt/lampp/htdocs/test/paypal/PayPal-PHP-SDK/composer/autoload_real.php",
-		"/opt/lampp/htdocs/test/paypal/PayPal-PHP-SDK/autoload.php",
-		"/opt/lampp/htdocs/test/paypal/first.php",
-		"/home/patricio/Downloads/backwpup/readme.txt",
-		"/opt/lampp/htdocs/pauta/application/views/_borrar_notacredito/form_factura.php",
-		"/opt/lampp/htdocs/pauta/application/views/ordenes/form_orden.php",
-		"/opt/lampp/htdocs/fuckapp/application/views/templates/footer.php",
-		"/opt/lampp/htdocs/test/racing_calendar_eventos.php",
-		"/opt/lampp/htdocs/fuckapp/db/create.sql",
-		"/opt/lampp/htdocs/fuckapp/db/schema-2.0.sql",
-		"/home/patricio/Downloads/awdb2013-2015-05-15.sql",
-		"/opt/lampp/htdocs/pauta/application/config/config.php",
-		"/opt/lampp/htdocs/pauta/system/core/Loader.php",
-		"/opt/lampp/htdocs/pauta/system/core/Common.php",
-		"/opt/lampp/htdocs/pauta/system/core/Config.php",
-		"/opt/lampp/htdocs/pauta/application/helpers/pauta_helper.php",
-		"/opt/lampp/htdocs/pauta/application/config/autoload.php",
-		"/opt/lampp/htdocs/pauta/system/helpers/url_helper.php",
-		"/opt/lampp/htdocs/pauta/application/config/constants.php",
-		"/opt/lampp/htdocs/fuckapp/system/helpers/url_helper.php",
-		"/opt/lampp/htdocs/fuckapp/application/views/layout/default.php",
-		"/opt/lampp/htdocs/test/paypal/PayPal-PHP-SDK/paypal/rest-api-sdk-php/tests/bootstrap.php",
-		"/opt/lampp/htdocs/test/paypal/paypal_cron.php",
-		"/opt/lampp/htdocs/test/paypal/order_confirmation.php"
+		"/opt/lampp/htdocs/pauta/application/views/facturas/comprobantes_asociados.php"
 	],
 	"find":
 	{
-		"height": 30.0
+		"height": 37.0
 	},
 	"find_in_files":
 	{
@@ -394,6 +394,42 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"brand",
+			"body",
+			"icono",
+			"card",
+			"> 15",
+			"onOffline",
+			"onOnline",
+			"transaction_error",
+			"sync",
+			"borrar_contenido_sync",
+			"sync",
+			"aler",
+			"-->\n",
+			"rc2016_firstime",
+			"get_category_nav",
+			"();\n",
+			"get_category_nav",
+			"rango",
+			"date",
+			"insertar_contenido_sync",
+			"insertar_contenido",
+			"progress",
+			"'",
+			"'  +",
+			"' +",
+			"2.1",
+			"brand-logo",
+			"font/font-awesome/",
+			"../fonts/",
+			"mobile-demo",
+			"lengh",
+			"hide-on-med-and-up",
+			"large",
+			"sideNav",
+			"mdi-navigation-me",
+			"*/\n",
 			"listar",
 			"function get_all",
 			"get_filtros_busqueda",
@@ -485,43 +521,7 @@
 			"myModal_ms_Label",
 			"Modal_",
 			"añadir",
-			"modal",
-			"model",
-			"load",
-			"_validar_montos",
-			"validar_montos",
-			"validar_cut",
-			"validar",
-			"$valores[\"eliminado\"] = 1;",
-			"eliminado=1",
-			"renume",
-			"filtro",
-			"class=\"label",
-			"count_all",
-			"RUTA_LISTADO",
-			"join(\"recepcion_tipo_error",
-			"get_recepcion_orden_descriptiva_por_id",
-			"join(\"recepcion_tipo_error",
-			"join(\"hist_recepcion_tipo_error",
-			"$this->load->view(\"historico_recepcion/tabla_tipo_errores_recepcion",
-			"$this->load->view(\"recepcion/tabla_tipo_errores_recepcion",
-			"function get_tipo_errores(",
-			"hist_recepcion_tipo_error",
-			"function get_tipo_errores(",
-			"hist_recepcion_tipo_error",
-			"recepcion_tipo_error",
-			"get_errores",
-			"_validar_cut",
-			"form_procesar_control_liquidaciones",
-			"/control_liquidaciones/aprobar",
-			"_validar_cut",
-			"_valida",
-			"_validar_cut",
-			"_validar_montos",
-			"$this->config",
-			"_valida",
-			"config",
-			"function _validar_montos("
+			"modal"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -529,6 +529,9 @@
 		"regex": false,
 		"replace_history":
 		[
+			"",
+			"../font/font-awesome/",
+			"font/font-awesome/",
 			"RUTA_LISTADO_RENUMERADAS",
 			"COLLATE=utf8_unicode_ci",
 			"CHARSET=utf8",
@@ -546,186 +549,8 @@
 	"groups":
 	[
 		{
-			"selected": 2,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "index.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2248,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								893,
-								893
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "js/materialize.min.js",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 119846,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "js/scripts.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 420,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								294,
-								294
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/home/patricio/Downloads/pull-to-refresh-master/index.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 807,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								704,
-								704
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/home/patricio/Downloads/pull-to-refresh-master/app.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1189,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								305,
-								305
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/opt/lampp/htdocs/racing_calendar/www/index.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2097,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1887,
-								1887
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 726.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -772,7 +597,7 @@
 	"project": "rc2016.sublime-project",
 	"replace":
 	{
-		"height": 56.0
+		"height": 70.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -781,6 +606,30 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"index",
+				"js/index.js"
+			],
+			[
+				"inde",
+				"index.html"
+			],
+			[
+				"mate",
+				"css/materialize.min.css"
+			],
+			[
+				"in",
+				"js/index.js"
+			],
+			[
+				"css",
+				"css/materialize.min.css"
+			],
+			[
+				"ma",
+				"css/materialize.min.css"
+			],
 			[
 				"listado_ordenes_control_gap",
 				"application/views/historico_recepcion/control_gap/listado_ordenes_control_gap.php"
@@ -1248,7 +1097,7 @@
 		[
 			[
 				"",
-				"/opt/lampp/htdocs/pauta/pauta.sublime-project"
+				"/opt/lampp/htdocs/laslilas/laslilas.sublime-project"
 			]
 		],
 		"width": 380.0
@@ -1269,7 +1118,7 @@
 	"show_minimap": true,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": true,
+	"side_bar_visible": false,
 	"side_bar_width": 150.0,
 	"status_bar_visible": true,
 	"template_settings":
